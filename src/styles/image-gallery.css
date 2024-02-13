@@ -1,0 +1,41 @@
+@import "react-image-gallery/styles/css/image-gallery.css";
+
+.image-gallery-slide-wrapper.image-gallery-thumbnails-right {
+    width: 70%;
+    border-radius: 5px;
+}
+
+.image-gallery-thumbnails-wrapper.image-gallery-thumbnails-right {
+    width: calc(100% - 72%);
+}
+
+.image-gallery-thumbnails, .image-gallery-thumbnails-container {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.image-gallery-thumbnail {
+    width: 100%;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 5px;
+}
+
+.image-gallery-image {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.image-gallery-thumbnail.active, .image-gallery-thumbnail:focus, .image-gallery-thumbnail:hover {
+  border: none;
+}
+
+.image-gallery-thumbnail:hover {
+    opacity: 0.8;
+}
+
+
+
+
+
+

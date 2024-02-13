@@ -65,7 +65,7 @@ const SellCarPage = () => {
           collaborate with you to create a personalized and professional
           listing, initiating the auction process.
         </Text>
-        <Stepper size="md" index={activeStep}>
+        <Stepper colorScheme={activeStep === 2 ? "green" : "blue"} size={{ base: "sm", sm: "md", md: "lg" }} index={activeStep}>
           {steps.map((step, index) => (
             <Step key={index} onClick={() => setActiveStep(index)}>
               <StepIndicator>

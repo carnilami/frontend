@@ -1,7 +1,10 @@
+import { CheckCircleIcon, DeleteIcon } from "@chakra-ui/icons";
 import {
   Alert,
   AlertDescription,
   AlertIcon,
+  Badge,
+  Box,
   Button,
   Card,
   CardBody,
@@ -12,6 +15,7 @@ import {
   FormLabel,
   HStack,
   Heading,
+  IconButton,
   Image,
   Input,
   InputGroup,
@@ -21,9 +25,11 @@ import {
   Stack,
   Text,
   Textarea,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Select } from "chakra-react-select";
+import { AnimatePresence, motion } from "framer-motion";
 import { Circle, UploadCloud } from "lucide-react";
 import { useState } from "react";
 import Dropzone from "react-dropzone";
@@ -38,15 +44,26 @@ import {
 } from "../../utils/validations";
 import CustomRadio from "../nav/CustomRadio";
 
+interface ImageProps {
+  id: string;
+  url: string;
+}
+
+const MAX_IMAGES = 25;
+const MAX_IMAGE_SIZE = 26214400; // 25MB
+
 const SellingAuctionInfo = () => {
   const [isReserved, setIsReserved] = useState(false);
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<ImageProps[]>([]);
 
   const setStep = useSellingPageStore((state) => state.setStep);
   const setData = useSellingPageStore((state) => state.setData);
   const postData = useSellingPageStore((state) => state.data);
 
   const addAuction = useAddAuction();
+
+  const dropzoneColor = useColorModeValue("gray.50", "gray.700");
+  const dropzoneBorderColor = useColorModeValue("gray.300", "gray.500");
 
   const {
     register,
@@ -58,8 +75,10 @@ const SellingAuctionInfo = () => {
   });
 
   const onSubmit = (data: AuctionInfoFormData) => {
-    setData({ ...data, images });
-    const submissionData = { ...postData, ...data, images };
+    const imageUrls = images.map((image) => image.url);
+
+    setData({ ...data, images: imageUrls });
+    const submissionData = { ...postData, ...data, images: imageUrls };
     addAuction.mutate(submissionData, {
       onSuccess: () => {
         setStep(2);
@@ -68,13 +87,23 @@ const SellingAuctionInfo = () => {
   };
 
   const handleImages = (acceptedFiles: File[]) => {
-    for (const file of acceptedFiles) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImages((prev) => [...prev, reader.result as string]);
-      };
-      reader.readAsDataURL(file);
-    }
+    setImages((prev) => {
+      const newImages = [...prev];
+      newImages.push(
+        ...acceptedFiles
+          .reverse()
+          .slice(0, MAX_IMAGES - prev.length)
+          .map((file) => ({
+            id: Math.random().toString(36).substring(2, 15),
+            url: URL.createObjectURL(file),
+          }))
+      );
+
+      if (newImages.length > MAX_IMAGES) {
+        newImages.splice(0, newImages.length - MAX_IMAGES);
+      }
+      return newImages;
+    });
   };
 
   const handleImageDelete = (index: number) => {
@@ -168,13 +197,13 @@ const SellingAuctionInfo = () => {
           </CardHeader>
           <CardBody as={Stack} spacing={6} pt={0}>
             <Stack p={5} bg={"blackAlpha.100"} borderRadius={10}>
-              <Text>
+              <Text fontSize={{base: "sm", md: "md"}}>
                 The reserve price is confidential, representing the minimum
                 amount your vehicle must reach to be sold. Vehicles with reserve
                 prices may attract less attention compared to those without
                 reserves.
               </Text>
-              <Text>
+              <Text fontSize={{base: "sm", md: "md"}}>
                 Please note that bidding often brings the end result well above
                 the reserve price.
               </Text>
@@ -230,11 +259,12 @@ const SellingAuctionInfo = () => {
               <Heading size="md">Photos</Heading>
             </Stack>
           </CardHeader>
-          <CardBody as={Stack} spacing={2} pt={0}>
+          <CardBody as={Stack} spacing={5} pt={0}>
             <Alert
               borderRadius={10}
-              status={images.length >= 6 ? "success" : "info"}
+              status={images.length >= 6 ? "success" : "error"}
               w="100%"
+              fontSize={{base: "sm", md: "md"}}
             >
               <AlertIcon />
               <AlertDescription>
@@ -242,7 +272,7 @@ const SellingAuctionInfo = () => {
                   ? "You have met the minimum images requirement."
                   : "Please add " +
                     (6 - images.length) +
-                    " more images to submit the application"}
+                    " more images to submit the application."}
               </AlertDescription>
             </Alert>
             <Dropzone
@@ -251,45 +281,92 @@ const SellingAuctionInfo = () => {
                 "image/jpeg": [],
                 "image/png": [],
               }}
-              maxSize={26214400} // 25MB
+              maxSize={MAX_IMAGE_SIZE}
+              disabled={images.length >= MAX_IMAGES}
             >
               {({ getRootProps, getInputProps }) => (
                 <Flex
                   w={"100%"}
-                  bg={"gray.50"}
+                  bg={dropzoneColor}
                   h="180px"
                   border="2px dashed"
-                  borderColor="gray.300"
+                  borderColor={dropzoneBorderColor}
                   borderRadius={10}
                   justifyContent="center"
                   alignItems={"center"}
                   display="flex"
                   flexDirection="column"
-                  cursor={"pointer"}
+                  cursor={
+                    images.length >= MAX_IMAGES ? "not-allowed" : "pointer"
+                  }
                   {...getRootProps()}
+                  position={"relative"}
                 >
                   <input {...getInputProps()} />
-                  <UploadCloud stroke="#3182ce" />
-                  <Text>Click to select photos or drop them here.</Text>
-                  <Text color="gray" fontSize="sm">
-                    Max 25MB per image
-                  </Text>
+                  {images.length >= MAX_IMAGES ? (
+                    <CheckCircleIcon color="green" />
+                  ) : (
+                    <UploadCloud stroke="#3182ce" />
+                  )}
+                  {images.length >= MAX_IMAGES ? (
+                    <Text mt={1} color="green" fontSize={{base: "xs", md: "sm"}}>
+                      Maximum Images Uploaded
+                    </Text>
+                  ) : (
+                    <Text mt={1} color="gray" fontSize={{base: "xs", md: "sm"}}>
+                      Drag and drop or click to upload images
+                    </Text>
+                  )}
+                  {images.length < MAX_IMAGES && (
+                    <Badge mt={1} colorScheme="blue" borderRadius={4} fontSize={{base: "xs", md: "sm"}}>
+                      {images.length + " / " + MAX_IMAGES} Images
+                    </Badge>
+                  )}
                 </Flex>
               )}
             </Dropzone>
             <HStack spacing={2} flexWrap="wrap" justifyContent="flex-start">
-              {images &&
-                images.map((image, index) => (
-                  <Image
-                    key={index}
-                    src={image}
-                    borderRadius={5}
-                    mt={2}
-                    h="auto"
-                    w="100px"
-                    onClick={() => handleImageDelete(index)}
-                  />
-                ))}
+              <AnimatePresence>
+                {images &&
+                  images.map((image, index) => (
+                    <Box
+                      key={image.id}
+                      as={motion.div}
+                      position="relative"
+                      width="100px"
+                      marginY={2}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{
+                        opacity: 0,
+                      }}
+                      // @ts-expect-error no problem in operation, although type error appears.
+                      transition={{
+                        layout: { ease: "easeInOut", duration: 0.3 },
+                      }}
+                      layoutId={image.id}
+                    >
+                      <Image
+                        src={image.url}
+                        borderRadius={5}
+                        h="auto"
+                        w="100%"
+                      />
+                      <IconButton
+                        aria-label="Delete Image"
+                        icon={<DeleteIcon />}
+                        size="sm"
+                        colorScheme="red"
+                        position="absolute"
+                        top={0}
+                        right={0}
+                        onClick={() => handleImageDelete(index)}
+                        borderTopLeftRadius={0}
+                        borderBottomRightRadius={0}
+                      />
+                    </Box>
+                  ))}
+              </AnimatePresence>
             </HStack>
           </CardBody>
         </Card>

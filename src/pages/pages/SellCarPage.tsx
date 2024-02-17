@@ -15,10 +15,10 @@ import {
   useSteps,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
-import SellingAuctionInfo from "../components/selling/SellingAuctionInfo";
-import SellingSuccess from "../components/selling/SellingSuccess";
-import VehicleInfo from "../components/selling/SellingVehicleInfo";
-import { useSellingPageStore } from "../stores";
+import SellingAuctionInfo from "../../components/selling/SellingAuctionInfo";
+import SellingSuccess from "../../components/selling/SellingSuccess";
+import VehicleInfo from "../../components/selling/SellingVehicleInfo";
+import { useSellingPageStore } from "../../stores";
 
 const steps = [
   { title: "First", description: "Vehicle Info" },
@@ -65,7 +65,11 @@ const SellCarPage = () => {
           collaborate with you to create a personalized and professional
           listing, initiating the auction process.
         </Text>
-        <Stepper colorScheme={activeStep === 2 ? "green" : "blue"} size={{ base: "sm", sm: "md", md: "lg" }} index={activeStep}>
+        <Stepper
+          colorScheme={activeStep === 2 ? "green" : "blue"}
+          size={{ base: "sm", sm: "md", md: "lg" }}
+          index={activeStep}
+        >
           {steps.map((step, index) => (
             <Step key={index} onClick={() => setActiveStep(index)}>
               <StepIndicator>

@@ -1,13 +1,11 @@
-import { TimeIcon } from "@chakra-ui/icons";
 import {
   AspectRatio,
+  Badge,
   Box,
   Card,
   CardBody,
   Heading,
   Image,
-  Stack,
-  Tag,
   Text,
   chakra,
   shouldForwardProp,
@@ -17,7 +15,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import NoReserveBadge from "../badges/NoReserveBadge";
 
-interface AuctionCardProps {
+interface MyListingCardProps {
   _id: string;
   titleImage: string;
   title: string;
@@ -32,7 +30,7 @@ const ChakraBox = chakra(motion.div, {
     isValidMotionProp(prop) || shouldForwardProp(prop),
 });
 
-const AuctionCard = ({
+const MyListingCard = ({
   _id,
   titleImage,
   title,
@@ -40,11 +38,10 @@ const AuctionCard = ({
   city,
   time,
   price,
-}: AuctionCardProps) => {
+}: MyListingCardProps) => {
   const [isActive, setIsActive] = useState(false);
   return (
     <ChakraBox
-      id={_id}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.95 }}
       animate={{
@@ -64,7 +61,7 @@ const AuctionCard = ({
             bg={"black"}
           >
             <Link to={`/auctions/${_id}`}>
-              <AspectRatio  ratio={3 / 2}>
+              <AspectRatio ratio={3 / 2}>
                 <Image
                   borderRadius={5}
                   src={titleImage}
@@ -74,25 +71,18 @@ const AuctionCard = ({
                 />
               </AspectRatio>
             </Link>
-            <Tag
+            <Badge
+              variant="solid"
+              fontSize="sm"
+              colorScheme="red"
               position="absolute"
               overflow="hidden"
               bottom={0}
               left={0}
-              backgroundColor="gray.900"
               margin={2}
             >
-              <Stack direction="row" spacing={1} alignItems={"center"}>
-                <TimeIcon color="gray" />
-                <Text color="white" fontWeight="700">
-                  {time}
-                </Text>
-                <Text color="gray">PKR</Text>
-                <Text color="white" fontWeight="700">
-                  {price.toLocaleString()}
-                </Text>
-              </Stack>
-            </Tag>
+              Declined
+            </Badge>
           </Box>
           <Heading size="sm" mt={2}>
             <Link to={`/auctions/${_id}`}>{title}</Link>
@@ -107,4 +97,4 @@ const AuctionCard = ({
   );
 };
 
-export default AuctionCard;
+export default MyListingCard;

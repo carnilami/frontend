@@ -33,13 +33,12 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
-import AuctionImages from "../components/auctions/AuctionImages";
-import NoReserveBadge from "../components/badges/NoReserveBadge";
-import PlaceBidModal from "../components/modals/PlaceBidModal";
-import ShareModal from "../components/modals/ShareModal";
-import useAuctionById from "../hooks/auctions/useAuctionById";
-
-const cdnUrl = "https://cdn.carnilami.com/";
+import AuctionImages from "../../components/auctions/AuctionImages";
+import NoReserveBadge from "../../components/badges/NoReserveBadge";
+import PlaceBidModal from "../../components/modals/PlaceBidModal";
+import ShareModal from "../../components/modals/ShareModal";
+import useAuctionById from "../../hooks/auctions/useAuctionById";
+import { CDN_URL } from "../../utils/constants";
 
 const AuctionDetailsPage = () => {
   const { id } = useParams();
@@ -59,7 +58,7 @@ const AuctionDetailsPage = () => {
     return <Text>Error 404- Auction not found.</Text>;
   }
 
-  const imageUrls = data.images.map((path: string) => cdnUrl + path);
+  const imageUrls = data.images.map((path: string) => CDN_URL + path);
 
   const tableOneData = [
     { heading: "Make", value: data.make },

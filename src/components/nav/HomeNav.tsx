@@ -56,8 +56,8 @@ const HomeNav = () => {
           Brand
         </MenuButton>
         <MenuList>
-          {carBrands.map((brand) => (
-            <MenuItem icon={brand.logo}>{brand.name}</MenuItem>
+          {carBrands.map((brand, index) => (
+            <MenuItem key={index} icon={brand.logo}>{brand.name}</MenuItem>
           ))}
         </MenuList>
       </Menu>
@@ -100,8 +100,8 @@ const HomeNav = () => {
           Vehicle Type
         </MenuButton>
         <MenuList>
-          {vehicleTypes.map((type) => (
-            <MenuItem icon={type.logo}>{type.name}</MenuItem>
+          {vehicleTypes.map((type, index) => (
+            <MenuItem key={index} icon={type.logo}>{type.name}</MenuItem>
           ))}
         </MenuList>
       </Menu>

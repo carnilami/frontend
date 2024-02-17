@@ -1,11 +1,17 @@
 import { createBrowserRouter } from "react-router-dom";
-import AboutUsPage from "./pages/AboutUsPage";
-import AuctionDetailsPage from "./pages/AuctionDetailsPage";
-import HomePage from "./pages/HomePage";
-import Layout from "./pages/Layout";
-import LoginPage from "./pages/LoginPage";
-import SellCarPage from "./pages/SellCarPage";
-import SearchVehicle from "./pages/SearchVehicle";
+import { AccountLayout } from "./pages/layouts/AccountLayout";
+import Layout from "./pages/layouts/Layout";
+import PrivateLayout from "./pages/layouts/PrivateLayout";
+import AboutUsPage from "./pages/pages/AboutUsPage";
+import AuctionDetailsPage from "./pages/pages/AuctionDetailsPage";
+import HomePage from "./pages/pages/HomePage";
+import LoginPage from "./pages/pages/LoginPage";
+import MyListings from "./pages/pages/MyListings";
+import MyProfile from "./pages/pages/MyProfile";
+import MySettings from "./pages/pages/MySettings";
+import SearchVehicle from "./pages/pages/SearchVehicle";
+import SellCarPage from "./pages/pages/SellCarPage";
+import ProfilePage from "./pages/pages/ProfilePage";
 
 const router = createBrowserRouter([
   {
@@ -29,13 +35,36 @@ const router = createBrowserRouter([
         element: <AboutUsPage />,
       },
       {
+        path: "/search",
+        element: <SearchVehicle />,
+      },
+    ],
+  },
+  {
+    element: <PrivateLayout />,
+    children: [
+      {
         path: "/sell",
         element: <SellCarPage />,
       },
       {
-        path: "/search",
-        element: <SearchVehicle />,
-      }
+        path: "/account",
+        element: <AccountLayout />,
+        children: [
+          {
+            index: true,
+            element: <ProfilePage />,
+          },
+          {
+            path: "/account/listings",
+            element: <MyListings />,
+          },
+          {
+            path: "/account/settings",
+            element: <MySettings />,
+          },
+        ],
+      },
     ],
   },
 ]);

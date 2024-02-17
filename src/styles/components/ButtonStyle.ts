@@ -10,6 +10,14 @@ export const ButtonStyles: ComponentStyleConfig = {
       color: "white",
       _hover: {
         bg: mode("#0065c7", "#1a7fe1")(props),
+        _disabled: {
+          bg: "#0171DE",
+        }
+      },
+      _disabled: {
+        _hover: {
+          bg: mode("#0065c7", "#1a7fe1")(props),
+        },
       },
     }),
     primaryOutline: (props) => ({

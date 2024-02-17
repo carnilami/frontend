@@ -42,3 +42,16 @@ export const AuctionInfoFormSchema = z.object({
 });
 
 export type AuctionInfoFormData = z.infer<typeof AuctionInfoFormSchema>;
+
+export const AuctionBiddingFormSchema = z.object({
+  bid: z.number().min(1000),
+});
+
+export type AuctionBiddingFormData = z.infer<typeof AuctionBiddingFormSchema>;
+
+export const ProfileFormSchema = z.object({
+  name: z.string().min(3).max(56),
+  bio: z.string().max(255).nullable(),
+});
+
+export type ProfileFormData = z.infer<typeof ProfileFormSchema>;

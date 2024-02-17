@@ -1,4 +1,5 @@
 import {
+  Box,
   Divider,
   Grid,
   GridItem,
@@ -8,11 +9,12 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import AuctionCard from "../components/auctions/AuctionCard";
-import AuctionCardSkeleton from "../components/auctions/AuctionCardSkeleton";
-import NewListingCard from "../components/auctions/NewListingCard";
-import HomeNav from "../components/nav/HomeNav";
-import useAuctions from "../hooks/auctions/useAuctions";
+import AuctionCard from "../../components/auctions/AuctionCard";
+import AuctionCardSkeleton from "../../components/auctions/AuctionCardSkeleton";
+import NewListingCard from "../../components/auctions/NewListingCard";
+import HomeNav from "../../components/nav/HomeNav";
+import useAuctions from "../../hooks/auctions/useAuctions";
+import { CDN_URL } from "../../utils/constants";
 
 const HomePage = () => {
   const { data, error, isLoading } = useAuctions();
@@ -37,12 +39,20 @@ const HomePage = () => {
         }}
       >
         <GridItem gridArea="main">
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 2, "2xl": 3 }} spacing={5}>
-            {isLoading && fake.map(() => <AuctionCardSkeleton />)}
+          <SimpleGrid
+            columns={{ base: 1, md: 2, lg: 3, xl: 2, "2xl": 3 }}
+            spacing={5}
+          >
+            {isLoading &&
+              fake.map((_, index) => (
+                <Box key={index}>
+                  <AuctionCardSkeleton />
+                </Box>
+              ))}
             {data?.map((auction) => (
               <AuctionCard
                 _id={auction._id}
-                titleImage={"https://cdn.carnilami.com/" + auction.images[0]}
+                titleImage={CDN_URL + auction.images[0]}
                 title={auction.title}
                 description={
                   auction.make +
@@ -53,7 +63,8 @@ const HomePage = () => {
                   " " +
                   auction.year +
                   ", " +
-                  auction.mileage + " Km"
+                  auction.mileage +
+                  " Km"
                 }
                 price={auction.reservePrice}
                 city={auction.city}
@@ -79,9 +90,10 @@ const HomePage = () => {
                     " " +
                     auction.year +
                     ", " +
-                    auction.mileage + " Km"
+                    auction.mileage +
+                    " Km"
                   }
-                  image={"https://cdn.carnilami.com/" + auction.images[0]}
+                  image={CDN_URL + auction.images[0]}
                   city={auction.city}
                 />
               ))}

@@ -34,15 +34,18 @@ import { Circle, UploadCloud } from "lucide-react";
 import { useState } from "react";
 import Dropzone from "react-dropzone";
 import { Controller, useForm } from "react-hook-form";
+import { Navigate } from "react-router-dom";
 import cities from "../../assets/cities.json";
 import { AuctionInfoFormData } from "../../entities/Auction";
 import useAddAuction from "../../hooks/auctions/useAddAuction";
+import useUser from "../../hooks/users/useUser";
 import { useSellingPageStore } from "../../stores";
 import {
   AuctionInfoFormData as AuctionInfoFD,
   AuctionInfoFormSchema,
 } from "../../utils/validations";
 import CustomRadio from "../nav/CustomRadio";
+import Loading from "../nav/Loading";
 
 interface ImageProps {
   id: string;
@@ -55,6 +58,7 @@ const MAX_IMAGE_SIZE = 26214400; // 25MB
 const SellingAuctionInfo = () => {
   const [isReserved, setIsReserved] = useState(false);
   const [images, setImages] = useState<ImageProps[]>([]);
+  const { data: userData, isLoading } = useUser();
 
   const setStep = useSellingPageStore((state) => state.setStep);
   const setData = useSellingPageStore((state) => state.setData);
@@ -64,6 +68,7 @@ const SellingAuctionInfo = () => {
 
   const dropzoneColor = useColorModeValue("gray.50", "gray.700");
   const dropzoneBorderColor = useColorModeValue("gray.300", "gray.500");
+  const reserveAlertColor = useColorModeValue("blackAlpha.200", "gray.700");
 
   const {
     register,
@@ -74,11 +79,24 @@ const SellingAuctionInfo = () => {
     resolver: zodResolver(AuctionInfoFormSchema),
   });
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (!userData) {
+    return <Navigate to="/" replace={true} />;
+  }
+
   const onSubmit = (data: AuctionInfoFormData) => {
     const imageUrls = images.map((image) => image.url);
 
-    setData({ ...data, images: imageUrls });
-    const submissionData = { ...postData, ...data, images: imageUrls };
+    setData({ ...data, images: imageUrls, sellerId: userData._id });
+    const submissionData = {
+      ...postData,
+      ...data,
+      images: imageUrls,
+      sellerId: userData._id,
+    };
     addAuction.mutate(submissionData, {
       onSuccess: () => {
         setStep(2);
@@ -87,23 +105,20 @@ const SellingAuctionInfo = () => {
   };
 
   const handleImages = (acceptedFiles: File[]) => {
-    setImages((prev) => {
-      const newImages = [...prev];
-      newImages.push(
-        ...acceptedFiles
-          .reverse()
-          .slice(0, MAX_IMAGES - prev.length)
-          .map((file) => ({
-            id: Math.random().toString(36).substring(2, 15),
-            url: URL.createObjectURL(file),
-          }))
-      );
-
-      if (newImages.length > MAX_IMAGES) {
-        newImages.splice(0, newImages.length - MAX_IMAGES);
-      }
-      return newImages;
-    });
+    for (const file of acceptedFiles) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        console.log(reader.result);
+        setImages((prev) => [
+          ...prev,
+          {
+            id: Math.random().toString(36).substr(2, 9),
+            url: reader.result as string,
+          },
+        ]);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleImageDelete = (index: number) => {
@@ -196,14 +211,14 @@ const SellingAuctionInfo = () => {
             </Stack>
           </CardHeader>
           <CardBody as={Stack} spacing={6} pt={0}>
-            <Stack p={5} bg={"blackAlpha.100"} borderRadius={10}>
-              <Text fontSize={{base: "sm", md: "md"}}>
+            <Stack p={5} bg={reserveAlertColor} borderRadius={10}>
+              <Text fontSize={{ base: "sm", md: "md" }}>
                 The reserve price is confidential, representing the minimum
                 amount your vehicle must reach to be sold. Vehicles with reserve
                 prices may attract less attention compared to those without
                 reserves.
               </Text>
-              <Text fontSize={{base: "sm", md: "md"}}>
+              <Text fontSize={{ base: "sm", md: "md" }}>
                 Please note that bidding often brings the end result well above
                 the reserve price.
               </Text>
@@ -264,7 +279,7 @@ const SellingAuctionInfo = () => {
               borderRadius={10}
               status={images.length >= 6 ? "success" : "error"}
               w="100%"
-              fontSize={{base: "sm", md: "md"}}
+              fontSize={{ base: "sm", md: "md" }}
             >
               <AlertIcon />
               <AlertDescription>
@@ -280,6 +295,7 @@ const SellingAuctionInfo = () => {
               accept={{
                 "image/jpeg": [],
                 "image/png": [],
+                "image/webp": [],
               }}
               maxSize={MAX_IMAGE_SIZE}
               disabled={images.length >= MAX_IMAGES}
@@ -309,16 +325,29 @@ const SellingAuctionInfo = () => {
                     <UploadCloud stroke="#3182ce" />
                   )}
                   {images.length >= MAX_IMAGES ? (
-                    <Text mt={1} color="green" fontSize={{base: "xs", md: "sm"}}>
+                    <Text
+                      mt={1}
+                      color="green"
+                      fontSize={{ base: "xs", md: "sm" }}
+                    >
                       Maximum Images Uploaded
                     </Text>
                   ) : (
-                    <Text mt={1} color="gray" fontSize={{base: "xs", md: "sm"}}>
+                    <Text
+                      mt={1}
+                      color="gray"
+                      fontSize={{ base: "xs", md: "sm" }}
+                    >
                       Drag and drop or click to upload images
                     </Text>
                   )}
                   {images.length < MAX_IMAGES && (
-                    <Badge mt={1} colorScheme="blue" borderRadius={4} fontSize={{base: "xs", md: "sm"}}>
+                    <Badge
+                      mt={1}
+                      colorScheme="blue"
+                      borderRadius={4}
+                      fontSize={{ base: "xs", md: "sm" }}
+                    >
                       {images.length + " / " + MAX_IMAGES} Images
                     </Badge>
                   )}

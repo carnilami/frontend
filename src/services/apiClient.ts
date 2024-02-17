@@ -29,6 +29,12 @@ class APIClient<T> {
       .post<T>(this.endpoint, data, config)
       .then((res) => res.data);
   };
+
+  put = (data: T, config: AxiosRequestConfig = {}) => {
+    return axiosInstance
+      .put<T>(this.endpoint, data, config)
+      .then((res) => res.data);
+  };
 }
 
 export default APIClient;

@@ -23,6 +23,14 @@ export interface Auction {
   auctionExpiry?: Date;
 }
 
+export interface AuctionBid {
+  _id?: string;
+  auctionId: string;
+  userId: string;
+  bid: number;
+  createdAt?: number;
+}
+
 export type AuctionInfoFormData = Partial<VehicleInfoForm> &
   Partial<AuctionInfoForm>;
 
@@ -49,4 +57,5 @@ export interface AuctionInfoForm {
   city?: string;
   reservePrice?: number;
   images?: string[];
+  sellerId?: string;
 }

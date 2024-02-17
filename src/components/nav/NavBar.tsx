@@ -15,39 +15,58 @@ import {
   MenuList,
   Show,
   Stack,
-  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import useUser from "../../hooks/users/useUser";
+import { useLoginModalStore } from "../../stores";
 import LoginModal from "../modals/LoginModal";
 import ColorSwitchToggle from "./ColorModeSwitch";
+import Loading from "./Loading";
 import Logo from "./Logo";
+import { PROFILE_CDN_URL } from "../../utils/constants";
 
 const NavBar = () => {
   const { data, isLoading } = useUser();
+  const { isOpen, open } = useLoginModalStore();
+  const navigate = useNavigate();
+
+  const navBarColor = useColorModeValue("blackAlpha.300", "whiteAlpha.300");
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return <Loading />;
   }
-
   console.log(data);
+
+  const handleCarSellButton = () => {
+    if (!data) {
+      open();
+    } else {
+      navigate("/sell");
+    }
+  };
 
   return (
     <HStack
       justifyContent="space-between"
       py={4}
       borderBottom="1px solid"
-      borderColor={useColorModeValue("#E2E8F0", "#2D3748")}
+      borderColor={navBarColor}
     >
       <Stack direction="row" spacing={7}>
-        <Logo />
+        <NavLink to="/">
+          <Logo />
+        </NavLink>
         <Show above="xl">
           <HStack>
             <NavLink to="/">
               <Button variant="ghost">Auctions</Button>
             </NavLink>
-            <Button variant="primary" borderRadius={50}>
+            <Button
+              variant="primary"
+              borderRadius={50}
+              onClick={handleCarSellButton}
+            >
               Sell A Car
             </Button>
           </HStack>
@@ -68,19 +87,28 @@ const NavBar = () => {
           {data ? (
             <Menu>
               <MenuButton>
-                <Avatar name={data.name} boxSize={10} />
+                <Avatar name={data.name} src={PROFILE_CDN_URL + data?.profilePicture} boxSize={10} />
               </MenuButton>
               <MenuList>
-                <MenuItem justifyContent="space-between">Profile</MenuItem>
-                <MenuItem>My Listings</MenuItem>
-                <MenuItem>Settings</MenuItem>
+                <NavLink to="/account">
+                  <MenuItem justifyContent="space-between">Profile</MenuItem>
+                </NavLink>
+                <NavLink to="/account/listings">
+                  <MenuItem>Listings</MenuItem>
+                </NavLink>
+                <NavLink to="/account/settings">
+                  <MenuItem>Settings</MenuItem>
+                </NavLink>
                 <MenuDivider mx={2} />
                 <MenuItem>Logout</MenuItem>
               </MenuList>
             </Menu>
           ) : (
-            <LoginModal />
+            <Button variant="outline" onClick={open}>
+              Sign In
+            </Button>
           )}
+          {isOpen && <LoginModal />}
           <ColorSwitchToggle />
         </Show>
         <Show below="xl">

@@ -19,10 +19,10 @@ const useUser = () => {
       });
     },
     refetchOnReconnect: true,
-    refetchOnWindowFocus: false,
-    staleTime: 60000,
+    refetchOnWindowFocus: true,
+    staleTime: 5000,
+    gcTime: 0,
     retry: 0,
-    enabled: !!headers,
   });
 };
 

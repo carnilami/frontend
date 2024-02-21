@@ -36,7 +36,6 @@ const NavBar = () => {
   if (isLoading) {
     return <Loading />;
   }
-  console.log(data);
 
   const handleCarSellButton = () => {
     if (!data) {

@@ -19,9 +19,6 @@ const AccountNav = () => {
           isFitted
           variant="soft-rounded"
           colorScheme="gray"
-          onChange={() => {
-            console.log("test");
-          }}
         >
           <TabList mb="1em">
             <Tab>Profile</Tab>

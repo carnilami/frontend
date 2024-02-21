@@ -6,6 +6,7 @@ import Loading from "../../components/nav/Loading";
 import NavBar from "../../components/nav/NavBar";
 import useUser from "../../hooks/users/useUser";
 import { useLoginModalStore } from "../../stores";
+import Footer from "../../components/nav/Footer";
 
 const PrivateLayout = () => {
   const { data, isLoading, error } = useUser();
@@ -31,9 +32,10 @@ const PrivateLayout = () => {
   }
 
   return (
-    <Flex direction="column" mx={{ base: "24px", lg: "6%", xl: "15%" }}>
+    <Flex direction="column" mx="auto" px="40px" maxW={{ base: "auto", xl: "1350px" }}>
       <NavBar />
       <Outlet />
+      <Footer />
     </Flex>
   );
 };

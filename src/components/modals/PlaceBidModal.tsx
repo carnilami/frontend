@@ -29,7 +29,7 @@ import converter from "number-to-words";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Auction, AuctionBid } from "../../entities/Auction";
-import useAddBid from "../../hooks/auctions/useAddBid";
+import useAddBid from "../../hooks/bids/useAddBid";
 import useUser from "../../hooks/users/useUser";
 import {
   AuctionBiddingFormData,

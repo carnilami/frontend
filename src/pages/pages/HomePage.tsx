@@ -40,7 +40,7 @@ const HomePage = () => {
       >
         <GridItem gridArea="main">
           <SimpleGrid
-            columns={{ base: 1, md: 2, lg: 3, xl: 2, "2xl": 3 }}
+            columns={{ base: 1, md: 2, lg: 3, xl: 3, "2xl": 3 }}
             spacing={5}
           >
             {isLoading &&
@@ -66,7 +66,7 @@ const HomePage = () => {
                   auction.mileage +
                   " Km"
                 }
-                price={auction.reservePrice}
+                price={auction.currentHighestBid || 0}
                 city={auction.city}
                 time="7d 12h 30m"
               />

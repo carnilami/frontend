@@ -7,7 +7,7 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-class APIClient<T> {
+class APIClient<T, U = T> {
   endpoint: string;
 
   constructor(endpoint: string) {
@@ -24,7 +24,7 @@ class APIClient<T> {
     return axiosInstance.get<T>(this.endpoint, config).then((res) => res.data);
   };
 
-  post = (data: T, config: AxiosRequestConfig = {}) => {
+  post = (data: U, config: AxiosRequestConfig = {}) => {
     return axiosInstance
       .post<T>(this.endpoint, data, config)
       .then((res) => res.data);
@@ -33,6 +33,12 @@ class APIClient<T> {
   put = (data: T, config: AxiosRequestConfig = {}) => {
     return axiosInstance
       .put<T>(this.endpoint, data, config)
+      .then((res) => res.data);
+  };
+
+  delete = (config: AxiosRequestConfig = {}) => {
+    return axiosInstance
+      .delete<T>(this.endpoint, config)
       .then((res) => res.data);
   };
 }

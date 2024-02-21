@@ -58,8 +58,8 @@ const ShareModal = ({ auctionId }: Props) => {
           <ModalBody>
             <Stack spacing={5}>
               <ButtonGroup spacing={6} size="lg" variant="solid">
-                {socials.map((social) => (
-                  <Link to="https://twitter.com/intent/tweet?text=Hey!%20I%20just%20auctioned%20my%20car%20on%20Car%20Nilami!%20Make%20sure%20to%20check%20it%20out.%20No%20reserve%20price,%20bid%20whatever%20you%20like!%0A%0AEnding%20in%20a%20week.%0A%0Ahttps%3A//carnilami.com/auctions/xHfjh">
+                {socials.map((social, index) => (
+                  <Link key={index} to="https://twitter.com/intent/tweet?text=Hey!%20I%20just%20auctioned%20my%20car%20on%20Car%20Nilami!%20Make%20sure%20to%20check%20it%20out.%20No%20reserve%20price,%20bid%20whatever%20you%20like!%0A%0AEnding%20in%20a%20week.%0A%0Ahttps%3A//carnilami.com/auctions/xHfjh">
                     <IconButton
                       key={social.name}
                       aria-label={social.name}

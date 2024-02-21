@@ -21,13 +21,36 @@ export interface Auction {
   modified: boolean;
   imported: boolean;
   auctionExpiry?: Date;
+  currentHighestBid: number;
+  seller?: {
+    name: string;
+    profilePicture: string;
+  }
 }
 
-export interface AuctionBid {
+export type AuctionBid = {
   _id?: string;
   auctionId: string;
   userId: string;
   bid: number;
+  createdAt: number;
+  userName?: string;
+  userProfilePicture?: string;
+}
+
+export type AuctionComment = {
+  _id?: string;
+  auctionId: string;
+  userId: string;
+  content: string;
+  createdAt?: number;
+  userName?: string;
+  upvotes?: AuctionCommentUpvote[];
+  userProfilePicture?: string;
+}
+
+export type AuctionCommentUpvote = {
+  userId: string;
   createdAt?: number;
 }
 

@@ -108,7 +108,6 @@ const SellingAuctionInfo = () => {
     for (const file of acceptedFiles) {
       const reader = new FileReader();
       reader.onload = () => {
-        console.log(reader.result);
         setImages((prev) => [
           ...prev,
           {

@@ -47,3 +47,24 @@ export function formatCommentTimeDifference(
     return `${Math.floor(differenceInSeconds / secondsInYear)}y`;
   }
 }
+
+export const formatAuctionTimeRemaining = (
+  auctionExpiry: number,
+  currentTimestamp: number
+) => {
+  const remaining = auctionExpiry - currentTimestamp;
+
+  const secondsInMinute = 60;
+  const secondsInHour = 3600;
+  const secondsInDay = 86400;
+
+  if (remaining < secondsInMinute) {
+    return `${remaining} Seconds`;
+  } else if (remaining < secondsInHour) {
+    return `${Math.floor(remaining / secondsInMinute)} Minutes`;
+  } else if (remaining < secondsInDay) {
+    return `${Math.floor(remaining / secondsInHour)} Hours`;
+  } else {
+    return `${Math.floor(remaining / secondsInDay)} Days`;
+  }
+};

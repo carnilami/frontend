@@ -25,13 +25,13 @@ import useAddCommentUpvote from "../../hooks/comments/useAddCommentUpvote";
 import useAuctionComments from "../../hooks/comments/useAuctionComments";
 import useDeleteCommentUpvote from "../../hooks/comments/useDeleteCommentUpvote";
 import useUser from "../../hooks/users/useUser";
-import { PROFILE_CDN_URL } from "../../utils/constants";
+import { API_URL, PROFILE_CDN_URL } from "../../utils/constants";
 import {
   formatCommentTimeDifference,
   sortCommentsAndBids,
 } from "../../utils/helpers";
 
-const socket = io("http://localhost:3000");
+const socket = io(API_URL);
 
 interface Props {
   auction: Auction;

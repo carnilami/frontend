@@ -20,7 +20,7 @@ export interface Auction {
   flawed: boolean;
   modified: boolean;
   imported: boolean;
-  auctionExpiry?: Date;
+  auctionExpiry: number;
   currentHighestBid: number;
   seller?: {
     name: string;
@@ -33,7 +33,7 @@ export type AuctionBid = {
   auctionId: string;
   userId: string;
   bid: number;
-  createdAt: number;
+  createdAt?: number;
   userName?: string;
   userProfilePicture?: string;
 }

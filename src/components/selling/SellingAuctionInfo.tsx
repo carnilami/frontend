@@ -167,7 +167,7 @@ const SellingAuctionInfo = () => {
                 <FormLabel>How long should the auction last?</FormLabel>
                 <Controller
                   control={control}
-                  name="expiry"
+                  name="auctionExpiry"
                   defaultValue={"14d"}
                   render={({ field: { onChange } }) => (
                     <CustomRadio

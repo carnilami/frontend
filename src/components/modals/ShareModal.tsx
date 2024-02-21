@@ -35,7 +35,7 @@ interface Props {
 const ShareModal = ({ auctionId }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { onCopy, value, setValue, hasCopied } = useClipboard(
-    "http://localhost:5173/auctions/" + auctionId
+    "/auctions/" + auctionId
   );
   const socials = [
     { icon: <Icon as={FaWhatsapp} fontSize="2xl" />, name: "whatsapp" },

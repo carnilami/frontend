@@ -4,7 +4,7 @@ import Logo from "./Logo";
 
 const Footer = () => {
   return (
-    <>
+    <Stack mt="auto">
       <Divider mt={12} mb={2} borderColor={"gray.500"} />
       <Box as="button" mt={15} mb={5}>
         <HStack justifyContent="space-between" p={4}>
@@ -35,7 +35,7 @@ const Footer = () => {
           </Stack>
         </HStack>
       </Box>
-    </>
+    </Stack>
   );
 };
 

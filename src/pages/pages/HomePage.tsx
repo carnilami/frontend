@@ -7,11 +7,11 @@ import {
   Show,
   SimpleGrid,
   Stack,
-  Text,
 } from "@chakra-ui/react";
 import AuctionCard from "../../components/auctions/AuctionCard";
 import AuctionCardSkeleton from "../../components/auctions/AuctionCardSkeleton";
 import NewListingCard from "../../components/auctions/NewListingCard";
+import AuctionLoadingError from "../../components/errors/AuctionLoadingError";
 import HomeNav from "../../components/nav/HomeNav";
 import useAuctions from "../../hooks/auctions/useAuctions";
 import { CDN_URL } from "../../utils/constants";
@@ -22,7 +22,7 @@ const HomePage = () => {
   const newListingData = data;
 
   if (error) {
-    return <Text> Error 404 </Text>;
+    return <AuctionLoadingError />;
   }
 
   return (
@@ -68,7 +68,7 @@ const HomePage = () => {
                 }
                 price={auction.currentHighestBid || 0}
                 city={auction.city}
-                time="7d 12h 30m"
+                expiry={auction.auctionExpiry}
               />
             ))}
           </SimpleGrid>

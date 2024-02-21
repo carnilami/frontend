@@ -36,7 +36,6 @@ const MyListingCard = ({
   title,
   description,
   city,
-  time,
   price,
 }: MyListingCardProps) => {
   const [isActive, setIsActive] = useState(false);

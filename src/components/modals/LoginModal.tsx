@@ -27,6 +27,7 @@ import { FaFacebook, FaGoogle } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
 import { useLoginModalStore } from "../../stores";
 import Logo from "../nav/Logo";
+import { API_URL } from "../../utils/constants";
 
 const LoginModal = () => {
   const { isOpen, close } = useLoginModalStore();
@@ -77,7 +78,7 @@ const LoginModal = () => {
               </AbsoluteCenter>
             </Box>
             <Stack>
-              <NavLink to="http://localhost:3000/api/auth/google">
+              <NavLink to={API_URL + "/api/auth/google"}>
                 <Button
                   variant="outline"
                   leftIcon={<Icon as={FaGoogle} fontSize="xl" />}

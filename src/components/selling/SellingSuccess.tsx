@@ -5,6 +5,7 @@ import {
   AlertTitle,
   Button,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 const SellingSuccess = () => {
   return (
@@ -23,11 +24,14 @@ const SellingSuccess = () => {
         Auction submitted!
       </AlertTitle>
       <AlertDescription maxWidth="sm">
-        Thank you for submitting the Auction. The auction will become available once our team has reviewed and approved it.
+        Thank you for submitting the Auction. The auction will become available
+        once our team has reviewed and approved it.
       </AlertDescription>
-      <Button mt={6} colorScheme="green">
-        My Listings
-      </Button>
+      <Link to="/account/listings">
+        <Button mt={6} colorScheme="green">
+          My Listings
+        </Button>
+      </Link>
     </Alert>
   );
 };

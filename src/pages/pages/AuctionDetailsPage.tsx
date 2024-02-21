@@ -1,11 +1,4 @@
-import {
-  ArrowUpIcon,
-  CalendarIcon,
-  DragHandleIcon,
-  QuestionIcon,
-  StarIcon,
-  TimeIcon,
-} from "@chakra-ui/icons";
+import { CalendarIcon, QuestionIcon, StarIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Button,
@@ -37,16 +30,19 @@ import { useParams } from "react-router-dom";
 import { io } from "socket.io-client";
 import AuctionComments from "../../components/auctions/AuctionComments";
 import AuctionImages from "../../components/auctions/AuctionImages";
+import AuctionRibbon from "../../components/auctions/AuctionRibbon";
 import NoReserveBadge from "../../components/badges/NoReserveBadge";
+import AuctionLoadingError from "../../components/errors/AuctionLoadingError";
+import NotFound from "../../components/errors/NotFound";
 import PlaceBidModal from "../../components/modals/PlaceBidModal";
 import ShareModal from "../../components/modals/ShareModal";
 import Loading from "../../components/nav/Loading";
 import { AuctionBid } from "../../entities/Auction";
 import useAuctionById from "../../hooks/auctions/useAuctionById";
 import useAuctionBids from "../../hooks/bids/useAuctionBids";
-import { CDN_URL, PROFILE_CDN_URL } from "../../utils/constants";
+import { API_URL, CDN_URL, PROFILE_CDN_URL } from "../../utils/constants";
 
-const socket = io("http://localhost:3000");
+const socket = io(API_URL);
 
 const AuctionDetailsPage = () => {
   const { id } = useParams();
@@ -58,7 +54,6 @@ const AuctionDetailsPage = () => {
   const borderColorAdaptive = useColorModeValue("gray.300", "gray.700");
   const footerColor = useColorModeValue("gray.100", "gray.700");
   const tableHeadingColor = useColorModeValue("gray.100", "gray.900");
-  const auctionRibbonColor = useColorModeValue("white", "gray.800");
 
   const {
     _id,
@@ -123,7 +118,9 @@ const AuctionDetailsPage = () => {
 
   useEffect(() => {
     setBiddings(bids || []);
+  }, [bids])
 
+  useEffect(() => {
     const handleBidEvent = (eventData: AuctionBid) => {
       if (
         eventData.auctionId === id &&
@@ -146,11 +143,11 @@ const AuctionDetailsPage = () => {
   }
 
   if (error) {
-    return <Text>Error Loading auction.</Text>;
+    return <AuctionLoadingError />;
   }
 
   if (!data) {
-    return <Text>Error 404- Auction not found.</Text>;
+    return <NotFound />;
   }
 
   return (
@@ -181,53 +178,14 @@ const AuctionDetailsPage = () => {
       </GridItem>
       <GridItem area={"aside"}></GridItem>
       <GridItem area={"details"} mt={3} as={Stack} spacing={4}>
-        <Stack direction="row" bg={auctionRibbonColor}>
-          <HStack
-            bg="transparent"
-            p={1}
-            px={5}
-            borderRadius={5}
-            w="100%"
-            justifyContent="space-between"
-            border="1px solid gray"
-            overflow={"hidden"}
-            wrap="nowrap"
-          >
-            <HStack>
-              <TimeIcon color={iconColorAdaptive} />
-              <Text fontWeight="bold" p={0} fontSize="lg">
-                Time Remaining
-              </Text>
-              <Text fontSize="lg">6 Days</Text>
-            </HStack>
-            <HStack>
-              <ArrowUpIcon color={iconColorAdaptive} />
-              <Text fontWeight="bold" fontSize="lg">
-                Highest Bid
-              </Text>
-              <Text fontSize="lg">
-                PKR{" "}
-                {highestBidValue.toLocaleString() ||
-                  data.reservePrice.toLocaleString()}
-              </Text>
-            </HStack>
-            <HStack>
-              <DragHandleIcon color={iconColorAdaptive} />
-              <Text fontWeight="bold" p={0} fontSize="lg">
-                Bids
-              </Text>
-              <Text fontSize="lg">{biddings?.length || 0}</Text>
-            </HStack>
-            <HStack>
-              <QuestionIcon color={iconColorAdaptive} />
-              <Text fontWeight="bold" p={0} fontSize="lg">
-                Questions
-              </Text>
-              <Text fontSize="lg">6</Text>
-            </HStack>
-          </HStack>
+        <HStack>
+          <AuctionRibbon
+            highestBid={highestBid}
+            biddings={biddings}
+            expiry={data.auctionExpiry}
+          />
           <PlaceBidModal auction={data} />
-        </Stack>
+        </HStack>
         <Card variant="outline" borderColor="gray">
           <CardBody>
             <HStack justifyContent="space-between">
@@ -236,7 +194,6 @@ const AuctionDetailsPage = () => {
               </Heading>
               <Text color={iconColorAdaptive}>Ending 13th Feburary, 2024</Text>
             </HStack>
-
             <Divider />
             <TableContainer
               borderRadius={5}

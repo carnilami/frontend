@@ -35,7 +35,7 @@ export type VehicleInfoFormData = z.infer<typeof VehicleInfoFormSchema>;
 export const AuctionInfoFormSchema = z.object({
   title: z.string().min(3).max(255),
   description: z.string().min(3).max(255),
-  expiry: z.string().min(1).max(255),
+  auctionExpiry: z.string().min(1).max(3),
   city: z.string().min(1).max(255),
   isReserved: z.string(),
   reservePrice: z.number().min(0).default(0),

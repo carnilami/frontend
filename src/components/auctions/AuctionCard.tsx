@@ -13,9 +13,11 @@ import {
   shouldForwardProp,
 } from "@chakra-ui/react";
 import { isValidMotionProp, motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import NoReserveBadge from "../badges/NoReserveBadge";
+import moment from "moment";
+import { formatAuctionTimeRemaining } from "../../utils/helpers";
 
 interface AuctionCardProps {
   _id: string;
@@ -23,7 +25,7 @@ interface AuctionCardProps {
   title: string;
   description: string;
   city: string;
-  time: string;
+  expiry: number;
   price: number;
 }
 
@@ -38,10 +40,23 @@ const AuctionCard = ({
   title,
   description,
   city,
-  time,
+  expiry,
   price,
 }: AuctionCardProps) => {
   const [isActive, setIsActive] = useState(false);
+  const [currentUnixTimestamp, setCurrentUnixTimestamp] = useState<number>(moment().unix());
+
+  const REFRESH_INTERVAL = 1000;
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentUnixTimestamp(moment().unix());
+    }, REFRESH_INTERVAL);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const auctionRemainingTime = formatAuctionTimeRemaining(expiry, currentUnixTimestamp);
+
   return (
     <ChakraBox
       id={_id}
@@ -85,7 +100,7 @@ const AuctionCard = ({
               <Stack direction="row" spacing={1} alignItems={"center"}>
                 <TimeIcon color="gray" />
                 <Text color="white" fontWeight="700">
-                  {time}
+                  {auctionRemainingTime}
                 </Text>
                 <Text color="gray">PKR</Text>
                 <Text color="white" fontWeight="700">

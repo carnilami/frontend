@@ -17,18 +17,16 @@ import {
 import { BellRing, Key, Mail } from "lucide-react";
 import { useState } from "react";
 import Loading from "../../components/nav/Loading";
-import UserNotifications from "../../entities/User";
 import useUpdateNotifications from "../../hooks/users/useUpdateNotifications";
 import useUser from "../../hooks/users/useUser";
+import User from "../../entities/User";
 
 const MySettings = () => {
   const { data, isLoading } = useUser();
 
   const [changesMade, setChangesMade] = useState(false);
   const [changesSaved, setChangesSaved] = useState(false);
-  const [clonedNotifications, setClonedNotifications] = useState<
-    UserNotifications | undefined
-  >(data?.notifications);
+  const [clonedNotifications, setClonedNotifications] = useState({});
 
   const updateNotifications = useUpdateNotifications();
 
@@ -56,7 +54,6 @@ const MySettings = () => {
 
   const handleToggle = (key: string, value: boolean) => {
     if (value !== undefined) {
-      // @ts-expect-error Key exists but typescript doesnt know if it exists
       setClonedNotifications((prevNotifications) => ({
         ...prevNotifications,
         [key]: value,
@@ -67,7 +64,7 @@ const MySettings = () => {
 
   const handleSaveChanges = () => {
     if (clonedNotifications) {
-      updateNotifications.mutate(clonedNotifications, {
+      updateNotifications.mutate(clonedNotifications as User, {
         onSuccess: () => {
           setChangesSaved(true);
           setTimeout(() => {
@@ -116,7 +113,9 @@ const MySettings = () => {
               </Button>
             )}
           </Alert>
-          {updateNotifications.isPending && <Progress size="xs" isIndeterminate />}
+          {updateNotifications.isPending && (
+            <Progress size="xs" isIndeterminate />
+          )}
         </Stack>
       )}
       <Stack divider={<StackDivider />} spacing={8}>

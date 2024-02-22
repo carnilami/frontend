@@ -1,4 +1,3 @@
-import { QuestionOutlineIcon } from "@chakra-ui/icons";
 import {
   AbsoluteCenter,
   Box,
@@ -6,7 +5,10 @@ import {
   Container,
   Divider,
   FormControl,
+  FormErrorIcon,
+  FormErrorMessage,
   FormLabel,
+  HStack,
   Heading,
   Icon,
   Input,
@@ -23,11 +25,11 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { FaFacebook, FaGoogle } from "react-icons/fa6";
+import { FaGoogle, FaWhatsapp } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
 import { useLoginModalStore } from "../../stores";
-import Logo from "../nav/Logo";
 import { API_URL } from "../../utils/constants";
+import Logo from "../nav/Logo";
 
 const LoginModal = () => {
   const { isOpen, close } = useLoginModalStore();
@@ -53,19 +55,26 @@ const LoginModal = () => {
         </ModalHeader>
         <ModalBody>
           <Stack spacing={3}>
-            <FormControl>
+            <FormControl isInvalid>
               <FormLabel>
-                Phone <QuestionOutlineIcon fontSize="xs" />
+                <HStack alignContent="center" spacing={1}>
+                  <Icon as={FaWhatsapp} />
+                  <Text>WhatsApp Number</Text>
+                </HStack>
               </FormLabel>
               <InputGroup>
                 <InputLeftAddon>+92</InputLeftAddon>
-                <Input variant="filled" type="tel" placeholder="03123456789" />
+                <Input isDisabled variant="filled" type="tel" placeholder="03123456789" />
               </InputGroup>
+              <FormErrorMessage>
+                <FormErrorIcon />
+                WhatsApp authentication is disabled, please use google.
+              </FormErrorMessage>
             </FormControl>
             <Text textAlign="end" textDecoration="underline" color="gray">
               Forget Password?
             </Text>
-            <Button w="100%" variant="primary">
+            <Button w="100%" variant="primary" isDisabled>
               Continue
             </Button>
             <Box position="relative" py={5}>
@@ -87,12 +96,6 @@ const LoginModal = () => {
                   Continue with Google
                 </Button>
               </NavLink>
-              <Button
-                variant="outline"
-                leftIcon={<Icon as={FaFacebook} fontSize="xl" />}
-              >
-                Continue with Facebook
-              </Button>
             </Stack>
           </Stack>
         </ModalBody>

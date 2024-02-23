@@ -21,7 +21,6 @@ const useUserListings = () => {
     gcTime: 1000 * 300, // 5 minutes
     staleTime: 1000 * 120, // 2 minutes
     retry: 1,
-    enabled: !!headers,
   });
 };
 

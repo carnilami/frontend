@@ -3,6 +3,7 @@ import {
   AlertDescription,
   AlertIcon,
   AlertTitle,
+  Box,
   Button,
   Flex,
   HStack,
@@ -12,16 +13,17 @@ import {
   Stack,
   StackDivider,
   Switch,
+  Tag,
   Text,
 } from "@chakra-ui/react";
-import { BellRing, Key, Mail } from "lucide-react";
+import { BellRing } from "lucide-react";
 import { useState } from "react";
 import Loading from "../../components/nav/Loading";
+import User from "../../entities/User";
 import useUpdateNotifications from "../../hooks/users/useUpdateNotifications";
 import useUser from "../../hooks/users/useUser";
-import User from "../../entities/User";
 
-const MySettings = () => {
+const SettingsPage = () => {
   const { data, isLoading } = useUser();
 
   const [changesMade, setChangesMade] = useState(false);
@@ -119,33 +121,22 @@ const MySettings = () => {
         </Stack>
       )}
       <Stack divider={<StackDivider />} spacing={8}>
-        <Heading as="h1" size="lg">
-          Settings
-        </Heading>
-        <Stack spacing={2}>
-          <Heading as="h2" size="md" mb={3}>
-            Account
+        <Stack>
+          <Heading as="h1" size="lg">
+            Settings
           </Heading>
-          <HStack>
-            <Mail />
-            <Text ml={2}>{data?.email}</Text>
-          </HStack>
-          <HStack justifyContent="space-between">
-            <HStack>
-              <Key />
-              <Text ml={2}>Password :</Text>
-              <Text ml={2} textAlign="center">
-                ●●●●●●●●●●
-              </Text>
-            </HStack>
-            <Button>Change password</Button>
-          </HStack>
+          <Text color="gray.400">Configure your settings from this page.</Text>
         </Stack>
         <Stack>
           <Heading as="h2" size="md" mb={3}>
-            Payment info
+            Payment info{" "}
+            <Tag colorScheme="red" textAlign="center">
+              Coming Soon!
+            </Tag>
           </Heading>
-          <Button w="xs">Click to view Payment Details</Button>
+          <Box>
+            <Button isDisabled>Click to view Payment Details</Button>
+          </Box>
         </Stack>
         {settings.map((setting) => (
           <Stack key={setting.title}>
@@ -176,4 +167,4 @@ const MySettings = () => {
   );
 };
 
-export default MySettings;
+export default SettingsPage;

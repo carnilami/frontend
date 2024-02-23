@@ -30,9 +30,10 @@ const AnimatedCheckIcon = motion(CheckIcon);
 
 interface Props {
   auctionId: string;
+  outline?: boolean
 }
 
-const ShareModal = ({ auctionId }: Props) => {
+const ShareModal = ({ auctionId, outline = false }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { onCopy, value, setValue, hasCopied } = useClipboard(
     "/auctions/" + auctionId
@@ -47,7 +48,7 @@ const ShareModal = ({ auctionId }: Props) => {
 
   return (
     <>
-      <Button onClick={onOpen} leftIcon={<ExternalLinkIcon />}>
+      <Button size={{ base: "sm", sm: "md" }} variant={outline ? "outline" : "solid"} onClick={onOpen} leftIcon={<ExternalLinkIcon />}>
         Share
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} size="sm">

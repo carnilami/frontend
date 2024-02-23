@@ -32,7 +32,7 @@ const PrivateLayout = () => {
   }
 
   return (
-    <Flex direction="column" mx="auto" px="40px" maxW={{ base: "auto", xl: "1350px" }}>
+    <Flex direction="column" mx="auto" px="20px" maxW={{ base: "auto", xl: "1350px" }}>
       <NavBar />
       <Outlet />
       <Footer />

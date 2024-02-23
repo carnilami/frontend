@@ -1,6 +1,13 @@
 import {
+  Button,
   Flex,
   Heading,
+  Hide,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Show,
   SimpleGrid,
   Stack,
   StackDivider,
@@ -10,6 +17,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { ChevronDown } from "lucide-react";
 import AuctionCardSkeleton from "../../components/auctions/AuctionCardSkeleton";
 import MyListingCard from "../../components/auctions/MyListingCard";
 import Loading from "../../components/nav/Loading";
@@ -17,7 +25,7 @@ import useUser from "../../hooks/users/useUser";
 import useUserListings from "../../hooks/users/useUserListings";
 import { CDN_URL } from "../../utils/constants";
 
-const MyListings = () => {
+const ListingsPage = () => {
   const { isLoading: userDataLoading } = useUser();
   const { data: listingsData, isLoading: listingsDataLoading } =
     useUserListings();
@@ -32,7 +40,7 @@ const MyListings = () => {
   return (
     <Stack divider={<StackDivider />} spacing={6}>
       <Stack>
-        <Heading as="h1" size="lg" mt={5}>
+        <Heading as="h1" size="lg">
           My Listings
         </Heading>
         <Text color="gray.400">
@@ -40,35 +48,56 @@ const MyListings = () => {
         </Text>
       </Stack>
       <Stack>
-        <Flex>
-          <Tabs variant="soft-rounded" size="sm" isFitted>
-            <TabList
-              mb="1em"
-              p="6px"
-              bg={tabsBackgroundColor}
-              as={Stack}
-              borderRadius={8}
-            >
-              {["All", "Active", "Pending", "Expired", "Declined"].map(
-                (tab) => (
-                  <Tab
-                    key={tab}
-                    borderRadius={8}
-                    _selected={{
-                      color: "white",
-                      bg: "#3B82F6",
-                      boxShadow: "md",
-                    }}
-                    disabled
-                  >
-                    {tab}
-                  </Tab>
-                )
-              )}
-            </TabList>
-          </Tabs>
-        </Flex>
-        <SimpleGrid columns={4} spacing={5}>
+        <Show above="sm">
+          <Flex>
+            <Tabs variant="soft-rounded" size="sm" isFitted>
+              <TabList
+                mb="1em"
+                p="6px"
+                bg={tabsBackgroundColor}
+                as={Stack}
+                borderRadius={8}
+              >
+                {["All", "Active", "Pending", "Expired", "Declined"].map(
+                  (tab) => (
+                    <Tab
+                      key={tab}
+                      borderRadius={8}
+                      _selected={{
+                        color: "white",
+                        bg: "#3B82F6",
+                        boxShadow: "md",
+                      }}
+                      disabled
+                    >
+                      {tab}
+                    </Tab>
+                  )
+                )}
+              </TabList>
+            </Tabs>
+          </Flex>
+        </Show>
+        <Hide above="sm">
+          <Flex mb={4}>
+            <Menu>
+              <MenuButton>
+                <Button rightIcon={<ChevronDown />}>Filter By</Button>
+              </MenuButton>
+              <MenuList defaultValue="active">
+                <MenuItem value="all">All</MenuItem>
+                <MenuItem value="active">Active</MenuItem>
+                <MenuItem>Pending</MenuItem>
+                <MenuItem>Declined</MenuItem>
+                <MenuItem>Ended</MenuItem>
+              </MenuList>
+            </Menu>
+          </Flex>
+        </Hide>
+        <SimpleGrid
+          columns={{ base: 1, sm: 2, md: 2, lg: 3, xl: 4 }}
+          spacing={5}
+        >
           {listingsDataLoading && fake.map(() => <AuctionCardSkeleton />)}
           {listingsData?.map((listing) => (
             <MyListingCard
@@ -98,4 +127,4 @@ const MyListings = () => {
   );
 };
 
-export default MyListings;
+export default ListingsPage;

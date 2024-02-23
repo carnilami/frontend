@@ -1,9 +1,9 @@
-import { HStack, Text, useColorModeValue } from "@chakra-ui/react";
+import { ArrowUpIcon, DragHandleIcon, TimeIcon } from "@chakra-ui/icons";
+import { HStack, Hide, Show, Text, useColorModeValue } from "@chakra-ui/react";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { AuctionBid } from "../../entities/Auction";
 import { formatAuctionTimeRemaining } from "../../utils/helpers";
-import { TimeIcon, DragHandleIcon, ArrowUpIcon } from "@chakra-ui/icons";
 
 interface Props {
   highestBid: AuctionBid;
@@ -31,10 +31,13 @@ const AuctionRibbon = ({ highestBid, biddings, expiry }: Props) => {
     currentUnixTimestamp
   );
 
+  const textResponsiveness = { base: "sm", md: "lg" };
+
   return (
     <HStack
       p={1.5}
       px={5}
+      minH={"40px"}
       borderRadius={5}
       w="100%"
       justifyContent="space-between"
@@ -45,30 +48,34 @@ const AuctionRibbon = ({ highestBid, biddings, expiry }: Props) => {
       {expiry < currentUnixTimestamp ? (
         <Text>Sold to {highestBid?.userName}</Text>
       ) : (
-        <HStack>
+        <HStack w="100%" justifyContent="space-between">
           <HStack>
             <TimeIcon color={iconColorAdaptive} />
-            <Text fontWeight="bold" p={0} fontSize="lg">
-              Ends
-            </Text>
-            <Text fontSize="lg">{auctionRemainingTime}</Text>
+            <Hide below="sm">
+              <Text fontWeight="bold" p={0} fontSize={textResponsiveness}>
+                Ends
+              </Text>
+            </Hide>
+            <Text fontSize={textResponsiveness}>{auctionRemainingTime}</Text>
           </HStack>
           <HStack>
             <ArrowUpIcon color={iconColorAdaptive} />
-            <Text fontWeight="bold" fontSize="lg">
-              Highest Bid
+            <Text fontWeight="bold" fontSize={textResponsiveness}>
+              Bid
             </Text>
-            <Text fontSize="lg">
+            <Text fontSize={textResponsiveness}>
               PKR {(highestBid?.bid || 0).toLocaleString()}
             </Text>
           </HStack>
-          <HStack>
-            <DragHandleIcon color={iconColorAdaptive} />
-            <Text fontWeight="bold" p={0} fontSize="lg">
-              Bids
-            </Text>
-            <Text fontSize="lg">{biddings?.length || 0}</Text>
-          </HStack>
+          <Show above="md">
+            <HStack>
+              <DragHandleIcon color={iconColorAdaptive} />
+              <Text fontWeight="bold" p={0} fontSize={textResponsiveness}>
+                Bids
+              </Text>
+              <Text fontSize={textResponsiveness}>{biddings?.length || 0}</Text>
+            </HStack>
+          </Show>
         </HStack>
       )}
     </HStack>

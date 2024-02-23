@@ -10,6 +10,8 @@ import {
   GridItem,
   HStack,
   Heading,
+  Hide,
+  Show,
   Stack,
   StackDivider,
   Stat,
@@ -25,13 +27,14 @@ import {
   Tr,
   useColorModeValue,
 } from "@chakra-ui/react";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { io } from "socket.io-client";
 import AuctionComments from "../../components/auctions/AuctionComments";
 import AuctionImages from "../../components/auctions/AuctionImages";
 import AuctionRibbon from "../../components/auctions/AuctionRibbon";
-import NoReserveBadge from "../../components/badges/NoReserveBadge";
+import AuctionTitle from "../../components/auctions/AuctionTitle";
 import AuctionLoadingError from "../../components/errors/AuctionLoadingError";
 import NotFound from "../../components/errors/NotFound";
 import PlaceBidModal from "../../components/modals/PlaceBidModal";
@@ -54,6 +57,7 @@ const AuctionDetailsPage = () => {
   const borderColorAdaptive = useColorModeValue("gray.300", "gray.700");
   const footerColor = useColorModeValue("gray.100", "gray.700");
   const tableHeadingColor = useColorModeValue("gray.100", "gray.900");
+  const textResponsiveness = { base: "xs", sm: "sm" }
 
   const {
     _id,
@@ -118,7 +122,7 @@ const AuctionDetailsPage = () => {
 
   useEffect(() => {
     setBiddings(bids || []);
-  }, [bids])
+  }, [bids]);
 
   useEffect(() => {
     const handleBidEvent = (eventData: AuctionBid) => {
@@ -165,34 +169,83 @@ const AuctionDetailsPage = () => {
     >
       <GridItem area={"images"}>
         <HStack pb={3} justifyContent="space-between">
-          <HStack>
-            <Heading fontSize="xl">{title}</Heading>
-            <NoReserveBadge />
-          </HStack>
-          <HStack>
-            <Button leftIcon={<StarIcon />}>Watch</Button>
-            <ShareModal auctionId={_id as string} />
-          </HStack>
+          <Show above="md">
+            <AuctionTitle title={title || ""} isReserve={true} />
+            <HStack>
+              <Button leftIcon={<StarIcon />}>Watch</Button>
+              <ShareModal auctionId={_id as string} />
+            </HStack>
+          </Show>
+          <Hide above="md">
+            <HStack w="100%" justifyContent="space-between" mb={2}>
+              <AuctionRibbon
+                highestBid={highestBid}
+                biddings={biddings}
+                expiry={data.auctionExpiry}
+              />
+              <PlaceBidModal
+                auction={data}
+                highestBidder={highestBid?.userName || ""}
+                highestBid={highestBidValue}
+              />
+            </HStack>
+          </Hide>
         </HStack>
         <AuctionImages imageUrls={imageUrls} />
       </GridItem>
       <GridItem area={"aside"}></GridItem>
       <GridItem area={"details"} mt={3} as={Stack} spacing={4}>
-        <HStack>
-          <AuctionRibbon
-            highestBid={highestBid}
-            biddings={biddings}
-            expiry={data.auctionExpiry}
-          />
-          <PlaceBidModal auction={data} />
-        </HStack>
-        <Card variant="outline" borderColor="gray">
+        <Show above="md">
+          <HStack>
+            <AuctionRibbon
+              highestBid={highestBid}
+              biddings={biddings}
+              expiry={data.auctionExpiry}
+            />
+            <PlaceBidModal
+              highestBidder={highestBid?.userName || ""}
+              highestBid={highestBidValue}
+              auction={data}
+            />
+          </HStack>
+        </Show>
+        <Hide above="md">
+          <Stack>
+            <AuctionTitle title={title || ""} isReserve={true} />
+            <Stack direction="row" divider={<StackDivider />}>
+              <Text fontSize={{ base: "sm", sm: "md" }}>
+                {make + " " + data.model + " " + data.variant + " " + data.year}
+              </Text>
+              <Text
+                color={iconColorAdaptive}
+                fontSize={{ base: "sm", sm: "md" }}
+              >
+                Ending {moment.unix(data?.auctionExpiry).format("LLL")}
+              </Text>
+            </Stack>
+            <HStack>
+              <Button
+                size={{ base: "sm", sm: "md" }}
+                variant="outline"
+                leftIcon={<StarIcon />}
+              >
+                Watch
+              </Button>
+              <ShareModal outline auctionId={_id as string} />
+            </HStack>
+          </Stack>
+        </Hide>
+        <Card variant={{ base: "unstyled", md: "outline" }} borderColor="gray">
           <CardBody>
             <HStack justifyContent="space-between">
               <Heading size="md" pb={2}>
                 Car Details
               </Heading>
-              <Text color={iconColorAdaptive}>Ending 13th Feburary, 2024</Text>
+              <Hide below="md">
+                <Text color={iconColorAdaptive}>
+                  Ending {moment.unix(data?.auctionExpiry).format("LLL")}
+                </Text>
+              </Hide>
             </HStack>
             <Divider />
             <TableContainer
@@ -202,7 +255,7 @@ const AuctionDetailsPage = () => {
               borderColor={borderColorAdaptive}
               my={5}
             >
-              <Stack direction="row" spacing={0}>
+              <Stack direction={{ base: "column", md: "row" }} spacing={0}>
                 <Table
                   border="1px solid"
                   borderColor={borderColorAdaptive}
@@ -213,6 +266,7 @@ const AuctionDetailsPage = () => {
                     {tableOneData.map((data, index) => (
                       <Tr key={index}>
                         <Th
+                          w={44}
                           py={3}
                           bg={tableHeadingColor}
                           borderRight="1px solid"
@@ -241,6 +295,7 @@ const AuctionDetailsPage = () => {
                     {tableTwoData.map((data, index) => (
                       <Tr key={index}>
                         <Th
+                          w={44}
                           py={3}
                           bg={tableHeadingColor}
                           borderRight="1px solid"
@@ -273,8 +328,8 @@ const AuctionDetailsPage = () => {
         {highestBid && (
           <Card variant="outline" borderColor="gray" overflow="hidden">
             <CardBody>
-              <Stack direction="row" divider={<StackDivider />}>
-                <Stack w="50%">
+              <Stack direction={{ base: "column", md: "row" }} divider={<StackDivider />}>
+                <Stack w={{ base: "100%", md: "50%" }}>
                   <Stat>
                     <StatLabel>
                       <HStack>
@@ -291,24 +346,24 @@ const AuctionDetailsPage = () => {
                         </HStack>
                       </HStack>
                     </StatLabel>
-                    <StatNumber fontSize="4xl" fontWeight="bold">
+                    <StatNumber fontSize={{base: "2xl", md: "4xl"}} fontWeight="bold">
                       PKR {highestBidValue.toLocaleString()}
                     </StatNumber>
                     <StatHelpText>
                       <HStack pl={1}>
                         <CalendarIcon />
-                        <Text>Ending 13th Feburary, 2024</Text>
+                        <Text fontSize={{ base: "xs", sm: "sm" }}>Ending {moment.unix(data?.auctionExpiry).format("LLL")}</Text>
                       </HStack>
                     </StatHelpText>
                   </Stat>
                 </Stack>
-                <Stack pl={3}>
+                <Stack pl={{ base: 0, md: 3 }}>
                   <HStack spacing={6}>
                     <Stack>
-                      <Text fontWeight="600">Seller</Text>
-                      <Text fontWeight="600">Ending</Text>
-                      <Text fontWeight="600">Bids</Text>
-                      <Text fontWeight="600">Views</Text>
+                      <Text fontSize={textResponsiveness} fontWeight="600">Seller</Text>
+                      <Text fontSize={textResponsiveness} fontWeight="600">Ending</Text>
+                      <Text fontSize={textResponsiveness} fontWeight="600">Bids</Text>
+                      <Text fontSize={textResponsiveness} fontWeight="600">Views</Text>
                     </Stack>
                     <Stack>
                       <HStack>
@@ -317,11 +372,11 @@ const AuctionDetailsPage = () => {
                           size="xs"
                           name={seller?.name}
                         />
-                        <Text>{seller?.name}</Text>
+                        <Text fontSize={textResponsiveness}>{seller?.name}</Text>
                       </HStack>
-                      <Text>13th Feburary, 2024</Text>
-                      <Text>{biddings?.length || 0}</Text>
-                      <Text>100</Text>
+                      <Text fontSize={textResponsiveness}>{moment.unix(data?.auctionExpiry).format("LLLL")}</Text>
+                      <Text fontSize={textResponsiveness}>{biddings?.length || 0}</Text>
+                      <Text fontSize={textResponsiveness}>100</Text>
                     </Stack>
                   </HStack>
                 </Stack>
@@ -329,12 +384,9 @@ const AuctionDetailsPage = () => {
             </CardBody>
             <CardFooter py={3} bg={footerColor}>
               <HStack justifyContent="space-between" w="100%">
-                <PlaceBidModal auction={data} />
+                <PlaceBidModal auction={data} highestBidder={highestBid?.userName || ""} highestBid={highestBidValue} />
                 <Text>
                   <QuestionIcon /> How does bidding work?
-                </Text>
-                <Text>
-                  <StarIcon /> Watch this auction
                 </Text>
               </HStack>
             </CardFooter>

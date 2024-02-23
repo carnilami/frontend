@@ -4,11 +4,11 @@ interface Props {
   size?: "xs" | "sm" | "md" | "lg";
 }
 
-const NoReserveBadge = ({ size = "md" }: Props) => {
+const NoReserveBadge = ({ size }: Props) => {
   return (
     <Badge
       colorScheme="blue"
-      fontSize={size}
+      fontSize={size ? size : { base: "sm" }}
       variant="subtle"
       children="No Reserve"
     />

@@ -6,24 +6,50 @@ import {
   Tab,
   TabList,
   Tabs,
+  useColorModeValue,
 } from "@chakra-ui/react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 const AccountNav = () => {
   const location = useLocation();
-  
+  const navigate = useNavigate();
+  const tabsBackgroundColor = useColorModeValue("gray.100", "whiteAlpha.100");
+
+  const navLinks = [
+    { label: "Account", value: "/account" },
+    { label: "Listings", value: "/account/listings" },
+    { label: "Settings", value: "/account/settings" },
+  ];
+
   return (
     <>
       <Hide above="md">
-        <Tabs
-          isFitted
-          variant="soft-rounded"
-          colorScheme="gray"
-        >
-          <TabList mb="1em">
-            <Tab>Profile</Tab>
-            <Tab>Listings</Tab>
-            <Tab>Settings</Tab>
+        <Tabs variant="soft-rounded" size="sm" isFitted mb={6} onChange={(index) => navigate(navLinks[index].value)} overflowX="hidden">
+          <TabList
+            mb="1em"
+            p="6px"
+            bg={tabsBackgroundColor}
+            as={Stack}
+            borderRadius={8}
+          >
+            {navLinks.map((navLink, index) => (
+                <Tab
+                  key={index}
+                  borderRadius={8}
+                  _selected={{
+                    color: "white",
+                    bg: "#3B82F6",
+                    boxShadow: "md",
+                    borderRadius: 8,
+                  }}
+                  _hover={{
+                    borderRadius: 8,
+                  }}
+                  disabled
+                >
+                  {navLink.label}
+                </Tab>
+            ))}
           </TabList>
         </Tabs>
       </Hide>

@@ -19,15 +19,13 @@ import { CDN_URL } from "../../utils/constants";
 const HomePage = () => {
   const { data, error, isLoading } = useAuctions();
   const fake = [1, 2, 3, 4, 5, 6, 7, 8];
-  const newListingData = data;
 
   if (error) {
     return <AuctionLoadingError />;
   }
 
   return (
-    <Stack direction="column" pt={5} spacing={6} mt={5}>
-      <HomeNav />
+    <Stack direction="column" pt={5} spacing={6}>
       <Grid
         templateAreas={{
           base: `"main"`,
@@ -39,9 +37,11 @@ const HomePage = () => {
         }}
       >
         <GridItem gridArea="main">
+          <HomeNav />
           <SimpleGrid
             columns={{ base: 1, md: 2, lg: 3, xl: 3, "2xl": 3 }}
             spacing={5}
+            mt={4}
           >
             {isLoading &&
               fake.map((_, index) => (
@@ -78,7 +78,7 @@ const HomePage = () => {
             <Heading size="md">New Listings</Heading>
             <Divider py={1} />
             <SimpleGrid mt={4} columns={1} spacing={5}>
-              {newListingData?.map((auction) => (
+              {data?.map((auction) => (
                 <NewListingCard
                   title={auction.title}
                   description={

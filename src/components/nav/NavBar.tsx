@@ -1,8 +1,14 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { HamburgerIcon, SearchIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Button,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
   HStack,
   IconButton,
   Input,
@@ -15,21 +21,27 @@ import {
   MenuList,
   Show,
   Stack,
+  StackDivider,
+  Text,
   useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { NavLink, useNavigate } from "react-router-dom";
+import useLogout from "../../hooks/auth/useLogout";
 import useUser from "../../hooks/users/useUser";
 import { useLoginModalStore } from "../../stores";
+import { PROFILE_CDN_URL } from "../../utils/constants";
 import LoginModal from "../modals/LoginModal";
 import ColorSwitchToggle from "./ColorModeSwitch";
 import Loading from "./Loading";
 import Logo from "./Logo";
-import { PROFILE_CDN_URL } from "../../utils/constants";
 
 const NavBar = () => {
   const { data, isLoading } = useUser();
+  const { isOpen: MenuIsOpen, onOpen, onClose } = useDisclosure();
   const { isOpen, open } = useLoginModalStore();
   const navigate = useNavigate();
+  const logout = useLogout();
 
   const navBarColor = useColorModeValue("blackAlpha.300", "whiteAlpha.300");
 
@@ -44,6 +56,16 @@ const NavBar = () => {
       navigate("/sell");
     }
   };
+
+  const handleLogout = () => {
+    logout.mutate();
+  };
+
+  const navLinks = [
+    { label: "My Account", value: "/account" },
+    { label: "My Listings", value: "/account/listings" },
+    { label: "Settings", value: "/account/settings" },
+  ];
 
   return (
     <HStack
@@ -86,20 +108,20 @@ const NavBar = () => {
           {data ? (
             <Menu>
               <MenuButton>
-                <Avatar name={data.name} src={PROFILE_CDN_URL + data?.profilePicture} boxSize={10} />
+                <Avatar
+                  name={data.name}
+                  src={PROFILE_CDN_URL + data?.profilePicture}
+                  boxSize={10}
+                />
               </MenuButton>
               <MenuList>
-                <NavLink to="/account">
-                  <MenuItem justifyContent="space-between">Profile</MenuItem>
+                {navLinks.map((navLink, index) => (
+                  <NavLink key={index} to={navLink.value}>
+                  <MenuItem>{navLink.label}</MenuItem>
                 </NavLink>
-                <NavLink to="/account/listings">
-                  <MenuItem>Listings</MenuItem>
-                </NavLink>
-                <NavLink to="/account/settings">
-                  <MenuItem>Settings</MenuItem>
-                </NavLink>
+                ))}
                 <MenuDivider mx={2} />
-                <MenuItem>Logout</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </MenuList>
             </Menu>
           ) : (
@@ -111,7 +133,67 @@ const NavBar = () => {
           <ColorSwitchToggle />
         </Show>
         <Show below="xl">
-          <IconButton aria-label="nav menu" icon={<HamburgerIcon />} />
+          <IconButton
+            aria-label="nav menu"
+            icon={<HamburgerIcon />}
+            onClick={onOpen}
+          />
+          <Drawer isOpen={MenuIsOpen} placement="right" onClose={onClose}>
+            <DrawerOverlay />
+            <DrawerContent>
+              <DrawerCloseButton />
+              <DrawerHeader>
+                <Logo />
+              </DrawerHeader>
+              <DrawerBody>
+                <Stack divider={<StackDivider />} spacing={8}>
+                  <Stack>
+                    <Button justifyContent="flex-start">Auctions</Button>
+                    <Button justifyContent="flex-start" variant="primary">
+                      Sell A Car
+                    </Button>
+                  </Stack>
+                  <Stack>
+                    {data ? (
+                      <Stack>
+                        <HStack mb={4}>
+                          <Avatar
+                            name={data.name}
+                            src={PROFILE_CDN_URL + data?.profilePicture}
+                            boxSize={10}
+                          />
+                          <Text fontSize="lg" fontWeight="bold">
+                            {data.name}
+                          </Text>
+                        </HStack>
+                        {navLinks.map((navLink, index) => (
+                          <NavLink key={index} to={navLink.value}>
+                            <Button
+                              variant="outline"
+                              justifyContent="flex-start"
+                              w="100%"
+                            >
+                              {navLink.label}
+                            </Button>
+                          </NavLink>
+                        ))}
+                      </Stack>
+                    ) : (
+                      <Button variant="outline" onClick={open}>
+                        Sign In
+                      </Button>
+                    )}
+                    {isOpen && <LoginModal />}
+                  </Stack>
+                </Stack>
+              </DrawerBody>
+              {data && (
+                <DrawerFooter>
+                  <Button colorScheme="red" onClick={handleLogout}>Logout</Button>
+                </DrawerFooter>
+              )}
+            </DrawerContent>
+          </Drawer>
         </Show>
       </HStack>
     </HStack>

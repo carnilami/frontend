@@ -5,12 +5,12 @@ import PrivateLayout from "./pages/layouts/PrivateLayout";
 import AboutUsPage from "./pages/pages/AboutUsPage";
 import AuctionDetailsPage from "./pages/pages/AuctionDetailsPage";
 import HomePage from "./pages/pages/HomePage";
-import MyListings from "./pages/pages/MyListings";
-import MySettings from "./pages/pages/MySettings";
+import ListingsPage from "./pages/pages/ListingsPage";
 import ProfilePage from "./pages/pages/ProfilePage";
 import RouteNotFoundPage from "./pages/pages/RouteNotFoundPage";
-import SearchVehicle from "./pages/pages/SearchVehicle";
+import SearchVehicle from "./pages/pages/SearchVehiclePage";
 import SellCarPage from "./pages/pages/SellCarPage";
+import SettingsPage from "./pages/pages/SettingsPage";
 
 const router = createBrowserRouter([
   {
@@ -56,11 +56,11 @@ const router = createBrowserRouter([
           },
           {
             path: "/account/listings",
-            element: <MyListings />,
+            element: <ListingsPage />,
           },
           {
             path: "/account/settings",
-            element: <MySettings />,
+            element: <SettingsPage />,
           },
         ],
       },

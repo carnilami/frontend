@@ -13,7 +13,8 @@ export default interface User {
   _id: string;
   accessToken: string;
   refreshToken: string;
-  email: string;
+  email?: string;
+  phone?: string;
   name: string;
   bio: string;
   tokens: number;

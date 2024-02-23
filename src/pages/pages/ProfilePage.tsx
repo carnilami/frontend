@@ -7,6 +7,7 @@ import {
   SkeletonCircle,
   Stack,
   StackDivider,
+  Tag,
   Text,
 } from "@chakra-ui/react";
 import moment from "moment";
@@ -43,24 +44,34 @@ const ProfilePage = () => {
       </HStack>
       <Stack>
         <Heading size="sm">Email</Heading>
-        <Text>{data?.email}</Text>
+        <Text>{data?.email || "No Email"}</Text>
         <Heading size="sm">Phone</Heading>
-        <Text>+92 317-4552300</Text>
+        <Text>{data?.phone ? "+92-" + data?.phone : "No Phone"}</Text>
         <Heading size="sm">Member Since</Heading>
         <Text>
           {moment.unix(data?.createdAt || moment().unix()).format("LL")}
         </Text>
       </Stack>
-      <HStack justifyContent="space-between" alignItems="center">
+      <Stack
+        direction={{ base: "column", lg: "row" }}
+        justifyContent="space-between"
+        alignItems={{ base: "flex-start", lg: "center" }}
+        spacing={4}
+      >
         <Stack>
           <Heading size="sm">Tokens</Heading>
           <Text>
-            You currently have 100 tokens. You will get 5 tokens every month or
-            you can buy them.
+            You currently have {data?.tokens} tokens. You will get 5 tokens
+            every month or you can buy them.
           </Text>
         </Stack>
-        <Button size="sm">Buy Tokens</Button>
-      </HStack>
+        <Stack>
+          <Button size="sm" isDisabled>
+            Buy Tokens
+          </Button>
+          <Tag colorScheme="red">Coming Soon!</Tag>
+        </Stack>
+      </Stack>
       <Stack>
         <Heading size="sm">Bidding History</Heading>
       </Stack>

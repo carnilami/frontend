@@ -1,4 +1,4 @@
-import { AddIcon, MinusIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import {
   Alert,
   AlertDescription,
@@ -38,9 +38,11 @@ import {
 
 interface Props {
   auction: Auction;
+  highestBid: number;
+  highestBidder: string;
 }
 
-const PlaceBidModal = ({ auction }: Props) => {
+const PlaceBidModal = ({ auction, highestBid, highestBidder }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
@@ -109,10 +111,10 @@ const PlaceBidModal = ({ auction }: Props) => {
 
   return (
     <>
-      <Button onClick={onOpen} leftIcon={<PlusSquareIcon />} variant="primary">
-        Place Bid
+      <Button onClick={onOpen} variant="primary">
+        Bid
       </Button>
-      <Modal isOpen={isOpen} onClose={onClose} size="md">
+      <Modal isOpen={isOpen} onClose={onClose} size={{ base: "sm", md: "md" }}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader mt={2}>
@@ -130,8 +132,10 @@ const PlaceBidModal = ({ auction }: Props) => {
               fontSize="sm"
               pt={1}
             >
-              The current highest bidder is Subhan Yousaf with a bid of PKR
-              3,000,000
+              {highestBidder
+                ? "The current highest bidder is {highestBidder} with a bid of PKR" +
+                  highestBid.toLocaleString()
+                : "There is no bid at the moment, be the first one to bid!"}
             </Text>
           </ModalHeader>
           <form onSubmit={handleSubmit(onSubmit)}>

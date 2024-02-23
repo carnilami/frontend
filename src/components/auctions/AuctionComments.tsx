@@ -13,6 +13,7 @@ import {
   Stack,
   Tag,
   Text,
+  useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
 import { Dot, SendHorizonalIcon } from "lucide-react";
@@ -53,6 +54,8 @@ const AuctionComments = ({ auction, bids }: Props) => {
   const deleteCommentUpvote = useDeleteCommentUpvote();
   const toast = useToast();
 
+  const commentFilterColor = useColorModeValue("black", "white");
+
   const REFRESH_INTERVAL = 10000;
 
   useEffect(() => {
@@ -83,7 +86,7 @@ const AuctionComments = ({ auction, bids }: Props) => {
     return () => {
       socket.offAny(handleSocketEvent);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCommentSocketEvent = (data: AuctionComment) => {
@@ -181,13 +184,11 @@ const AuctionComments = ({ auction, bids }: Props) => {
       return updatedComments;
     });
 
-    deleteCommentUpvote.mutate(
-      {
-        auctionId: auction?._id ?? "",
-        commentId,
-        userId: user?._id || "",
-      }
-    );
+    deleteCommentUpvote.mutate({
+      auctionId: auction?._id ?? "",
+      commentId,
+      userId: user?._id || "",
+    });
   };
 
   const handleUpvoteAddition = (commentId: string) => {
@@ -208,13 +209,11 @@ const AuctionComments = ({ auction, bids }: Props) => {
       return updatedComments;
     });
 
-    addCommentUpvote.mutate(
-      {
-        auctionId: auction?._id ?? "",
-        commentId,
-        userId: user?._id || "",
-      }
-    );
+    addCommentUpvote.mutate({
+      auctionId: auction?._id ?? "",
+      commentId,
+      userId: user?._id || "",
+    });
   };
 
   const commentFilters = [
@@ -256,17 +255,20 @@ const AuctionComments = ({ auction, bids }: Props) => {
   return (
     <Stack spacing={5} mt={2}>
       <Stack>
-        <HStack justifyContent="space-between">
+        <Stack
+          direction={{ base: "column", md: "row" }}
+          justifyContent="space-between"
+        >
           <Heading size="md">Comments, Bids & Questions</Heading>
-          <HStack spacing={4}>
+          <HStack spacing={4} flexWrap="wrap">
             {commentFilters.map((filter) => (
               <Button
                 key={filter.value}
                 color="gray"
                 variant="unstyled"
                 size="sm"
-                _hover={{ color: "black" }}
-                _active={{ color: "black" }}
+                _hover={{ color: commentFilterColor }}
+                _active={{ color: commentFilterColor }}
                 isActive={currentFilter === filter.value}
                 onClick={() => setFilter(filter.value)}
               >
@@ -274,7 +276,7 @@ const AuctionComments = ({ auction, bids }: Props) => {
               </Button>
             ))}
           </HStack>
-        </HStack>
+        </Stack>
         <InputGroup>
           <InputRightElement>
             <IconButton

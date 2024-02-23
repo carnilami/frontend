@@ -50,7 +50,7 @@ const SellCarPage = () => {
 
   return (
     <Stack w="100%" justifyItems="center" alignItems="center">
-      <Stack w={{ md: "50rem" }} spacing={6} my={6} mx={5}>
+      <Stack maxW={{ md: "50rem" }} spacing={6} my={6}>
         <Heading size="xl">Tell us about your vehicle</Heading>
         <Text fontSize="md">
           Please share some fundamental details about yourself and the car

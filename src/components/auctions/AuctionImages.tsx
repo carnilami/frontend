@@ -27,7 +27,6 @@ const AuctionImages = ({ imageUrls }: Props) => {
       thumbnailPosition={showThumbnail ? "right" : "bottom"}
       showThumbnails={showThumbnail}
       infinite={false}
-      
     />
   );
 };

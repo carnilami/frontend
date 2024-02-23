@@ -43,7 +43,6 @@ const AuctionCard = ({
   expiry,
   price,
 }: AuctionCardProps) => {
-  const [isActive, setIsActive] = useState(false);
   const [currentUnixTimestamp, setCurrentUnixTimestamp] = useState<number>(moment().unix());
 
   const REFRESH_INTERVAL = 1000;
@@ -62,10 +61,6 @@ const AuctionCard = ({
       id={_id}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.95 }}
-      animate={{
-        rotate: isActive ? 90 : 0,
-      }}
-      onClick={() => setIsActive(!isActive)}
       borderRadius={5}
       overflow="hidden"
     >

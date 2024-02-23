@@ -10,6 +10,7 @@ import {
   DrawerHeader,
   DrawerOverlay,
   HStack,
+  Hide,
   IconButton,
   Input,
   InputGroup,
@@ -147,7 +148,7 @@ const NavBar = () => {
           {isOpen && <LoginModal />}
           <ColorSwitchToggle />
         </Show>
-        <Show below="xl">
+        <Hide above="xl">
           <IconButton
             aria-label="nav menu"
             icon={<HamburgerIcon />}
@@ -211,7 +212,7 @@ const NavBar = () => {
               )}
             </DrawerContent>
           </Drawer>
-        </Show>
+        </Hide>
       </HStack>
     </HStack>
   );

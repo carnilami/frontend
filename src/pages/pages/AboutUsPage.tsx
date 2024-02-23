@@ -14,19 +14,7 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  Input,
   UnorderedList,
-  Textarea,
-  Button
-
-} from "@chakra-ui/react";
-
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
 } from "@chakra-ui/react";
 
 const AboutUsPage = () => {
@@ -201,9 +189,11 @@ const AboutUsPage = () => {
         </ListItem>
         <ListItem>
           <Heading my={3} as="h3" size="md">
-          Complete the Sale
+            Complete the Sale
           </Heading>
-          Once you've agreed on a price, finalize the sale and arrange for payment and delivery. CarNilami ensures a secure transaction process to protect both buyers and sellers.
+          Once you've agreed on a price, finalize the sale and arrange for
+          payment and delivery. CarNilami ensures a secure transaction process
+          to protect both buyers and sellers.
         </ListItem>
       </OrderedList>
       <Heading
@@ -223,19 +213,21 @@ const AboutUsPage = () => {
       <UnorderedList mt={3}>
         <ListItem>
           <Heading my={3} as="h3" size="md">
-          Choose the Right Location
+            Choose the Right Location
           </Heading>
-          Find a clean, well-lit area to photograph your car. Avoid busy backgrounds or distracting elements.
+          Find a clean, well-lit area to photograph your car. Avoid busy
+          backgrounds or distracting elements.
         </ListItem>
         <ListItem>
           <Heading my={3} as="h3" size="md">
-          Highlight Key Features
+            Highlight Key Features
           </Heading>
-          Take photos during the day to make the most of natural light. Avoid harsh shadows by shooting in the early morning or late afternoon.
+          Take photos during the day to make the most of natural light. Avoid
+          harsh shadows by shooting in the early morning or late afternoon.
         </ListItem>
         <ListItem>
           <Heading my={3} as="h3" size="md">
-          Use Natural Light
+            Use Natural Light
           </Heading>
           Receive offers from interested buyers and negotiate terms if
           necessary. CarNilami provides tools to manage offers and facilitate
@@ -243,181 +235,33 @@ const AboutUsPage = () => {
         </ListItem>
         <ListItem>
           <Heading my={3} as="h3" size="md">
-          Keep it Clean
+            Keep it Clean
           </Heading>
-          Clean your car inside and out before taking photos. Remove clutter from the interior and ensure the exterior is free of dirt and debris
+          Clean your car inside and out before taking photos. Remove clutter
+          from the interior and ensure the exterior is free of dirt and debris
         </ListItem>
         <ListItem>
           <Heading my={3} as="h3" size="md">
-          Take Multiple Angles
+            Take Multiple Angles
           </Heading>
-          Capture your car from different angles to provide a comprehensive view. Include shots of the front, back, sides, and interior.
+          Capture your car from different angles to provide a comprehensive
+          view. Include shots of the front, back, sides, and interior.
         </ListItem>
         <ListItem>
           <Heading my={3} as="h3" size="md">
-          Landscape Photos Only
+            Landscape Photos Only
           </Heading>
-          Please make sure to take all photographs in Landscape orentiation. No Portraits allowed.
+          Please make sure to take all photographs in Landscape orentiation. No
+          Portraits allowed.
         </ListItem>
         <ListItem>
           <Heading my={3} as="h3" size="md">
-          Edit and Enhance
+            Edit and Enhance
           </Heading>
-          Use photo editing software to enhance your images. Adjust brightness, contrast, and color balance to make your photos look their best.
+          Use photo editing software to enhance your images. Adjust brightness,
+          contrast, and color balance to make your photos look their best.
         </ListItem>
       </UnorderedList>
-
-
-
-      {/*ACCORDIANS ( FAQ )*/}
-
-      <Heading
-        mt={10}
-        mb={5}
-        as="h2"
-        size="xl"
-        borderBottom="3px solid"
-        pb={3}
-        borderColor="blue.400"
-      >
-        Frequently Asked Questions
-      </Heading>
-
-      <Accordion defaultIndex={[0]} allowMultiple my="5">
-        <AccordionItem>
-          <AccordionButton>
-            <Box as="span" flex="1" textAlign="left">
-              <Text fontSize="xl" fontWeight="600">
-                {" "}
-                What are the fees for the buyer on car nilami?{" "}
-              </Text>
-            </Box>
-            <AccordionIcon />
-          </AccordionButton>
-          <AccordionPanel pb={4}>
-            <Text fontSize="lg">
-              In addition to the final purchase price paid to the seller, buyers
-              pay a 4.5% buyer’s fee to Cars & Bids. The buyer’s fee has a
-              minimum of $225, and a maximum of $4,500.
-            </Text>
-          </AccordionPanel>
-        </AccordionItem>
-
-        <AccordionItem>
-          <AccordionButton>
-            <Box as="span" flex="1" textAlign="left">
-              <Text fontSize="xl" fontWeight="600">
-                {" "}
-                How do I place a bid?{" "}
-              </Text>
-            </Box>
-            <AccordionIcon />
-          </AccordionButton>
-          <AccordionPanel pb={4}>
-            <Text fontSize="lg">
-              In order to place a bid, you first have to register, which we’ve
-              explained above. Once you’ve registered and you’ve found a car
-              you’re interested in buying, bidding is easy – just click the
-              “Place Bid” icon on a vehicle’s listing page. Then, you’re
-              prompted to enter your bid amount. Your bid must be higher than
-              the previous bid, of course – and depending on the current bidding
-              level, there may be a minimum increase over the previous bid. Once
-              you’ve submitted your bid, we place a hold on your credit card for
-              4.5% of your bid amount until the duration of the auction, in case
-              you end up as the winning bidder.
-            </Text>
-          </AccordionPanel>
-        </AccordionItem>
-
-        <AccordionItem>
-          <AccordionButton>
-            <Box as="span" flex="1" textAlign="left">
-              <Text fontSize="xl" fontWeight="600">
-                How do bid increments work?
-              </Text>
-            </Box>
-            <AccordionIcon />
-          </AccordionButton>
-
-          <AccordionPanel pb={4}>
-            <Text fontSize="lg">
-              Bid increments increase as follows: Minimum bid of $100 to start
-              the auction 100 PKR increments up to $14,999 250 PKR increments
-              from $15,000 to $49,999 500 PKR increments from $50,000 to 20 Lakh
-              1,000 PKR increments at or above 50 Lakh
-            </Text>
-          </AccordionPanel>
-        </AccordionItem>
-
-        <AccordionItem>
-          <AccordionButton>
-            <Box as="span" flex="1" textAlign="left">
-              <Text fontSize="xl" fontWeight="600">
-                How do I contact a seller privately?
-              </Text>
-            </Box>
-            <AccordionIcon />
-          </AccordionButton>
-
-          <AccordionPanel pb={4}>
-            <Text fontSize="lg">
-              Bid increments increase as follows: Minimum bid of $100 to start
-              the auction 100 PKR increments up to $14,999 250 PKR increments
-              from $15,000 to $49,999 500 PKR increments from $50,000 to 20 Lakh
-              1,000 PKR increments at or above 50 Lakh
-            </Text>
-          </AccordionPanel>
-        </AccordionItem>
-
-        <AccordionItem>
-          <AccordionButton>
-            <Box as="span" flex="1" textAlign="left">
-              <Text fontSize="xl" fontWeight="600">
-                Once the auction is over, how do I complete the transaction?
-              </Text>
-            </Box>
-            <AccordionIcon />
-          </AccordionButton>
-
-          <AccordionPanel pb={4}>
-            <Text fontSize="lg">
-              At the conclusion of the auction, both the buyer and seller are
-              given each other’s contact information to complete the
-              transaction. Read more about Finalizing the Transaction.
-            </Text>
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
-
-      {/* SUPPORT PAGE */}
-
-      <Stack mt={10} spacing={5}>
-        <Heading>Looking for help? Contact Us below;</Heading>
-
-
-        <Text> Fill up the form below and we'll get back in touch with you within 24 hours!  </Text> 
-        
-        <HStack mt={10}>  
-        
-        <Input placeholder=' Enter your Name ' width='50%' />
-
-        <Input type= 'number' placeholder=' Enter your Phone Number ' width='50%'/>
-
-        
-
-         
-          </HStack>
-
-          <Input placeholder= 'Enter your Email ' /> 
-
-        <Textarea placeholder="Enter your Question" /> 
-
-        <Button variant="primary" width="50%"> Submit </Button> 
-     
-        
-       
-      </Stack>
-
     </>
   );
 };

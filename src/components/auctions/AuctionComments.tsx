@@ -135,6 +135,17 @@ const AuctionComments = ({ auction, bids }: Props) => {
   }, []);
 
   const onCommentSubmit = () => {
+    if (!user) {
+      toast({
+        title: "Please Login!",
+        description: "You must be logged in to comment.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
     addComment.mutate(
       {
         auctionId: auction?._id ?? "",
@@ -156,6 +167,15 @@ const AuctionComments = ({ auction, bids }: Props) => {
   };
 
   const onUpvote = (commentId: string) => {
+    toast({
+      title: "Please Login!",
+      description: "You must be logged in to upvote.",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+      position: "top",
+    });
+
     const hasUserUpvoted = comments
       .find((comment) => comment._id === commentId)
       ?.upvotes?.find((upvote) => upvote.userId === user?._id);

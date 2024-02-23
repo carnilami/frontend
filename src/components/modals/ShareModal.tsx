@@ -24,6 +24,7 @@ import { motion } from "framer-motion";
 import { FaInstagram } from "react-icons/fa";
 import { FaFacebook, FaThreads, FaWhatsapp, FaXTwitter } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import { FRONTEND_URL } from "../../utils/constants";
 
 const AnimatedCopyIcon = motion(CopyIcon);
 const AnimatedCheckIcon = motion(CheckIcon);
@@ -35,7 +36,7 @@ interface Props {
 
 const ShareModal = ({ auctionId, outline = false }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { onCopy, value, setValue, hasCopied } = useClipboard(
+  const { onCopy, value, setValue, hasCopied } = useClipboard(FRONTEND_URL +
     "/auctions/" + auctionId
   );
   const socials = [

@@ -83,7 +83,17 @@ const PlaceBidModal = ({ auction, highestBid, highestBidder }: Props) => {
   };
 
   const onSubmit = (data: AuctionBiddingFormData) => {
-    if (!userData) return;
+    if (!userData) {
+      toast({
+        title: "Please Login!",
+        description: "You need to be logged in to bid.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
     if (error) setError(null);
 
     const bidData: AuctionBid = {

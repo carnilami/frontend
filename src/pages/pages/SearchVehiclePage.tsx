@@ -1,75 +1,60 @@
-import {
-  Box,
-  HStack,
-  Heading,
-  Radio,
-  RadioGroup,
-  Select,
-  Stack,
-} from "@chakra-ui/react";
-
-import { useState } from "react";
+import { Box, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react";
+import { Navigate, useSearchParams } from "react-router-dom";
+import AuctionCard from "../../components/auctions/AuctionCard";
+import AuctionCardSkeleton from "../../components/auctions/AuctionCardSkeleton";
+import useAuctionsSearch from "../../hooks/auctions/useAuctionsSearch";
+import { CDN_URL } from "../../utils/constants";
 
 const SearchVehicle = () => {
-  const [value, setValue] = useState("1");
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q");
+  const { data, isLoading } = useAuctionsSearch(query || "");
+  const fake = [1, 2, 3, 4, 5, 6, 7, 8];
+
+  if (!query) {
+    return <Navigate to="/" />;
+  }
+
   return (
-    <Stack spacing={6} mt={10}>
-      <Heading size="xl" textAlign="center">
-        Filter for cars and vehicles up for auctions
-      </Heading>
-      <HStack>
-        <Select
-          placeholder="Select BodyType"
-          width="20%"
-          variant="filled"
-        >
-          <option value="option1">Sedan</option>
-          <option value="option1">HatchBack</option>
-          <option value="option2">MotorBike </option>
-          <option value="option3">Heavy Vehicle</option>
-        </Select>
-
-        <Select placeholder="Select City" width="20%" variant="filled">
-          <option value="option1">Lahore</option>
-          <option value="option2">Islamabad </option>
-          <option value="option3">Karachi</option>
-          <option value="option3">Sialkot</option>
-          <option value="option3">Gujranwala</option>
-          <option value="option3">Larri Adda</option>
-          <option value="option3">Multan</option>
-        </Select>
-
-        <Select placeholder="Select Brand" width="20%" variant="filled">
-          <option value="option1">Toyota</option>
-          <option value="option2">Honda </option>
-          <option value="option3">Suzuki</option>
-          <option value="option3">MG</option>
-          <option value="option3">Hyundai</option>
-          <option value="option3">Kia</option>
-          <option value="option3">Changan</option>
-          <option value="option3">Nissan</option>
-          <option value="option3">Daihatsu</option>
-          <option value="option3">DFSK</option>
-        </Select>
-    
-
-     
-        <Select placeholder="Fuel Type" width="20%">
-          <option value="Option1">Petrol</option>
-          <option value="Option2">Diesel</option>
-          <option value="Option3">Hybrid</option>
-          <option value="Option4">Electric</option>
-        </Select>
-        </HStack>
-        <Box borderWidth={5} overflow='hidden' width="20%">
-          <RadioGroup onChange={setValue} value={value}>
-            <Stack direction="row">
-              <Radio value="1">Manual</Radio>
-              <Radio value="2">Automatic</Radio>
-            </Stack>
-          </RadioGroup>
-        </Box>
-    
+    <Stack mt={4}>
+      <Stack spacing={0}>
+        <Heading size="lg">Search Results</Heading>
+        <Text>For: {searchParams.get("q") || ""}</Text>
+      </Stack>
+      <SimpleGrid
+        columns={{ base: 1, md: 2, lg: 3, xl: 3, "2xl": 3 }}
+        spacing={5}
+        mt={4}
+      >
+        {isLoading &&
+          fake.map((_, index) => (
+            <Box key={index}>
+              <AuctionCardSkeleton />
+            </Box>
+          ))}
+        {data?.map((auction) => (
+          <AuctionCard
+            _id={auction._id}
+            titleImage={CDN_URL + auction.images[0]}
+            title={auction.title}
+            description={
+              auction.make +
+              " " +
+              auction.model +
+              " " +
+              auction.variant +
+              " " +
+              auction.year +
+              ", " +
+              auction.mileage +
+              " Km"
+            }
+            price={auction.currentHighestBid || 0}
+            city={auction.city}
+            expiry={auction.auctionExpiry}
+          />
+        ))}
+      </SimpleGrid>
     </Stack>
   );
 };

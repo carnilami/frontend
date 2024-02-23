@@ -22,9 +22,11 @@ import Loading from "../../components/nav/Loading";
 import User from "../../entities/User";
 import useUpdateNotifications from "../../hooks/users/useUpdateNotifications";
 import useUser from "../../hooks/users/useUser";
+import useLogout from "../../hooks/auth/useLogout";
 
 const SettingsPage = () => {
   const { data, isLoading } = useUser();
+  const logout = useLogout();
 
   const [changesMade, setChangesMade] = useState(false);
   const [changesSaved, setChangesSaved] = useState(false);
@@ -35,6 +37,10 @@ const SettingsPage = () => {
   if (isLoading) {
     return <Loading />;
   }
+
+  const handleLogout = () => {
+    logout.mutate();
+  };
 
   const settings = [
     {
@@ -160,7 +166,7 @@ const SettingsPage = () => {
           </Stack>
         ))}
         <Flex>
-          <Button colorScheme="red">Logout</Button>
+          <Button colorScheme="red" onClick={handleLogout} isDisabled={logout.isPending} isLoading={logout.isPending}>Logout</Button>
         </Flex>
       </Stack>
     </>

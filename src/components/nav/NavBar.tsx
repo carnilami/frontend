@@ -13,7 +13,7 @@ import {
   IconButton,
   Input,
   InputGroup,
-  InputLeftElement,
+  InputRightElement,
   Menu,
   MenuButton,
   MenuDivider,
@@ -26,6 +26,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import useLogout from "../../hooks/auth/useLogout";
 import useUser from "../../hooks/users/useUser";
@@ -39,6 +40,7 @@ import Logo from "./Logo";
 const NavBar = () => {
   const { data, isLoading } = useUser();
   const { isOpen: MenuIsOpen, onOpen, onClose } = useDisclosure();
+  const [search, setSearch] = useState("");
   const { isOpen, open } = useLoginModalStore();
   const navigate = useNavigate();
   const logout = useLogout();
@@ -59,6 +61,12 @@ const NavBar = () => {
 
   const handleLogout = () => {
     logout.mutate();
+  };
+
+  const handleSearch = () => {
+    if (search === "") return;
+    navigate("/search?q=" + search);
+    setSearch("");
   };
 
   const navLinks = [
@@ -95,13 +103,20 @@ const NavBar = () => {
       </Stack>
       <HStack>
         <InputGroup w={{ base: "100", md: "md", lg: "sm", xl: "sm" }}>
-          <InputLeftElement pointerEvents="none">
-            <SearchIcon />
-          </InputLeftElement>
+          <InputRightElement>
+            <IconButton
+              aria-label="search"
+              variant="ghost"
+              icon={<SearchIcon />}
+              onClick={handleSearch}
+            />
+          </InputRightElement>
           <Input
             type="text"
             variant="outline"
             placeholder="Search for Cars (ex: Honda City 2018)"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </InputGroup>
         <Show above="xl">
@@ -117,8 +132,8 @@ const NavBar = () => {
               <MenuList>
                 {navLinks.map((navLink, index) => (
                   <NavLink key={index} to={navLink.value}>
-                  <MenuItem>{navLink.label}</MenuItem>
-                </NavLink>
+                    <MenuItem>{navLink.label}</MenuItem>
+                  </NavLink>
                 ))}
                 <MenuDivider mx={2} />
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
@@ -189,7 +204,9 @@ const NavBar = () => {
               </DrawerBody>
               {data && (
                 <DrawerFooter>
-                  <Button colorScheme="red" onClick={handleLogout}>Logout</Button>
+                  <Button colorScheme="red" onClick={handleLogout}>
+                    Logout
+                  </Button>
                 </DrawerFooter>
               )}
             </DrawerContent>

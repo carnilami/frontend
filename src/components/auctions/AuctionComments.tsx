@@ -264,7 +264,7 @@ const AuctionComments = ({ auction, bids }: Props) => {
       sortedCommentsAndBids.push(
         ...comments.sort(
           (a, b) => (b.upvotes?.length || 0) - (a.upvotes?.length || 0)
-        )
+        )?.reverse()
       );
       break;
     default:

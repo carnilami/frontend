@@ -49,37 +49,11 @@ const HomePage = () => {
                   <AuctionCardSkeleton />
                 </Box>
               ))}
-            {data?.map((auction) => (
-              <AuctionCard
-                _id={auction._id}
-                titleImage={CDN_URL + auction.images[0]}
-                title={auction.title}
-                description={
-                  auction.make +
-                  " " +
-                  auction.model +
-                  " " +
-                  auction.variant +
-                  " " +
-                  auction.year +
-                  ", " +
-                  auction.mileage +
-                  " Km"
-                }
-                price={auction.currentHighestBid || 0}
-                city={auction.city}
-                expiry={auction.auctionExpiry}
-              />
-            ))}
-          </SimpleGrid>
-        </GridItem>
-        <Show above="xl">
-          <GridItem ml={10} gridArea="aside">
-            <Heading size="md">New Listings</Heading>
-            <Divider py={1} />
-            <SimpleGrid mt={4} columns={1} spacing={5}>
-              {data?.map((auction) => (
-                <NewListingCard
+            {data?.map((auction, index) => (
+              <Box key={index}>
+                <AuctionCard
+                  _id={auction._id}
+                  titleImage={CDN_URL + auction.images[0]}
                   title={auction.title}
                   description={
                     auction.make +
@@ -89,13 +63,43 @@ const HomePage = () => {
                     auction.variant +
                     " " +
                     auction.year +
-                    ", " +
-                    auction.mileage +
+                    " - " +
+                    auction.mileage.toLocaleString() +
                     " Km"
                   }
-                  image={CDN_URL + auction.images[0]}
+                  price={auction.currentHighestBid || 0}
                   city={auction.city}
+                  expiry={auction.auctionExpiry}
                 />
+              </Box>
+            ))}
+          </SimpleGrid>
+        </GridItem>
+        <Show above="xl">
+          <GridItem ml={10} gridArea="aside">
+            <Heading size="md">New Listings</Heading>
+            <Divider py={1} />
+            <SimpleGrid mt={4} columns={1} spacing={5}>
+              {data?.map((auction, index) => (
+                <Box key={index}>
+                  <NewListingCard
+                    title={auction.title}
+                    description={
+                      auction.make +
+                      " " +
+                      auction.model +
+                      " " +
+                      auction.variant +
+                      " " +
+                      auction.year +
+                      ", " +
+                      auction.mileage +
+                      " Km"
+                    }
+                    image={CDN_URL + auction.images[0]}
+                    city={auction.city}
+                  />
+                </Box>
               ))}
             </SimpleGrid>
           </GridItem>

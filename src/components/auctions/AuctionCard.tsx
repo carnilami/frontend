@@ -13,11 +13,11 @@ import {
   shouldForwardProp,
 } from "@chakra-ui/react";
 import { isValidMotionProp, motion } from "framer-motion";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import NoReserveBadge from "../badges/NoReserveBadge";
-import moment from "moment";
 import { formatAuctionTimeRemaining } from "../../utils/helpers";
+import NoReserveBadge from "../badges/NoReserveBadge";
 
 interface AuctionCardProps {
   _id: string;
@@ -79,17 +79,15 @@ const AuctionCard = ({
               borderRadius={5}
               bg={"black"}
             >
-              <Link to={`/auctions/${_id}`}>
-                <AspectRatio ratio={3 / 2}>
-                  <Image
-                    borderRadius={5}
-                    src={titleImage}
-                    objectFit="cover"
-                    w="100%"
-                    _hover={{ opacity: 0.8 }}
-                  />
-                </AspectRatio>
-              </Link>
+              <AspectRatio ratio={3 / 2}>
+                <Image
+                  borderRadius={5}
+                  src={titleImage}
+                  objectFit="cover"
+                  w="100%"
+                  _hover={{ opacity: 0.8 }}
+                />
+              </AspectRatio>
               <Tag
                 position="absolute"
                 overflow="hidden"
@@ -111,7 +109,7 @@ const AuctionCard = ({
               </Tag>
             </Box>
             <Heading size="sm" mt={2}>
-              <Link to={`/auctions/${_id}`}>{title}</Link>
+              {title}
             </Heading>
             <Text>
               {price === 0 && <NoReserveBadge size="xs" />} {description}

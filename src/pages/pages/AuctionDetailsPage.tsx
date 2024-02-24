@@ -78,6 +78,7 @@ const AuctionDetailsPage = () => {
     modified,
     imported,
     images,
+    reserved
   } = data || {};
 
   const highestBidValue = biddings[0]?.bid ?? 0;
@@ -170,7 +171,7 @@ const AuctionDetailsPage = () => {
       <GridItem area={"images"}>
         <HStack pb={3} justifyContent="space-between">
           <Show above="md">
-            <AuctionTitle title={title || ""} isReserve={true} />
+            <AuctionTitle title={title || ""} isReserve={reserved!} />
             <HStack>
               <Button leftIcon={<StarIcon />}>Watch</Button>
               <ShareModal auctionId={_id as string} />
@@ -211,7 +212,7 @@ const AuctionDetailsPage = () => {
         </Show>
         <Hide above="md">
           <Stack>
-            <AuctionTitle title={title || ""} isReserve={true} />
+            <AuctionTitle title={title || ""} isReserve={reserved!} />
             <Stack direction="row" divider={<StackDivider />}>
               <Text fontSize={{ base: "sm", sm: "md" }}>
                 {make + " " + data.model + " " + data.variant + " " + data.year}

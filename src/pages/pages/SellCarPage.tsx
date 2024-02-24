@@ -32,8 +32,12 @@ const SellCarPage = () => {
   });
 
   const step = useSellingPageStore((state) => state.step);
+
   useEffect(() => {
     setActiveStep(step);
+    return () => {
+      setActiveStep(0);
+    };
   }, [setActiveStep, step]);
 
   const renderComponentByStep = () => {

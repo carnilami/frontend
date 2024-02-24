@@ -50,12 +50,7 @@ const SettingsPage = () => {
           title: "Send new bid notifications",
           value: data?.notifications.sellerNewBid,
           key: "sellerNewBid",
-        },
-        {
-          title: "Send new comment notifications",
-          value: data?.notifications.sellerNewComment,
-          key: "sellerNewComment",
-        },
+        }
       ],
     },
   ];

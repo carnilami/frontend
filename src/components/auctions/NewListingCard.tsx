@@ -14,7 +14,7 @@ const NewListingCard = ({ title, description, image, city }: Props) => {
         <Box position="relative" display="inline-block">
           <Image borderRadius={5} src={image} _hover={{ opacity: 0.8 }} />
         </Box>
-        <Heading size="sm" mt={2}>
+        <Heading size="sm">
           {title}
         </Heading>
         <Text fontSize="sm">{description}</Text>

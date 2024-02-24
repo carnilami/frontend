@@ -4,10 +4,18 @@ import {
   AlertIcon,
   AlertTitle,
   Button,
+  Stack,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import { useSellingPageStore } from "../../stores";
 
 const SellingSuccess = () => {
+  const setStep = useSellingPageStore((state) => state.setStep);
+
+  const handleNewAd = () => {
+    setStep(0);
+  }
+
   return (
     <Alert
       status="success"
@@ -27,11 +35,14 @@ const SellingSuccess = () => {
         Thank you for submitting the Auction. The auction will become available
         once our team has reviewed and approved it.
       </AlertDescription>
-      <Link to="/account/listings">
-        <Button mt={6} colorScheme="green">
-          My Listings
+      <Stack mt={6} spacing={1}>
+        <Link to="/account/listings">
+          <Button w="100%" colorScheme="green">My Listings</Button>
+        </Link>
+        <Button colorScheme="green" variant="outline" onClick={handleNewAd}>
+          Post New Ad
         </Button>
-      </Link>
+      </Stack>
     </Alert>
   );
 };

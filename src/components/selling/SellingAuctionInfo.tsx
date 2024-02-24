@@ -253,6 +253,7 @@ const SellingAuctionInfo = () => {
                   <Input
                     {...register("reservePrice", { valueAsNumber: true })}
                     type="number"
+                    defaultValue={0}
                     pl={12}
                     placeholder="Enter your minimum price"
                   />

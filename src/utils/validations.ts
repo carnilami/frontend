@@ -77,9 +77,7 @@ export const AuctionInfoFormSchema = z.object({
   city: z.string().min(1, "Specify your auction city.").max(255),
   isReserved: z.string(),
   reservePrice: z
-    .number({
-      invalid_type_error: "Please provide valid reserve price.",
-    })
+    .number()
     .min(0)
     .optional()
     .default(0),

@@ -2,12 +2,15 @@ import { useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import APIClient from "../../services/apiClient";
+import { useSellingPageStore } from "../../stores";
 import { validateAuthCookies } from "../../utils/helpers";
 
 const useLogout = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const toast = useToast();
+  const setStep = useSellingPageStore((state) => state.setStep);
+
   const headers = validateAuthCookies();
 
   return useMutation({
@@ -32,6 +35,7 @@ const useLogout = () => {
         isClosable: true,
         position: "top",
       });
+      setStep(0);
     },
     onError: () => {
       toast({

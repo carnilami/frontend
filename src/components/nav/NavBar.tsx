@@ -165,7 +165,7 @@ const NavBar = () => {
                 <Stack divider={<StackDivider />} spacing={8}>
                   <Stack>
                     <Button justifyContent="flex-start">Auctions</Button>
-                    <Button justifyContent="flex-start" variant="primary">
+                    <Button justifyContent="flex-start" variant="primary" onClick={handleCarSellButton}>
                       Sell A Car
                     </Button>
                   </Stack>

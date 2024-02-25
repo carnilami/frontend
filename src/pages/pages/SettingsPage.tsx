@@ -56,6 +56,7 @@ const SettingsPage = () => {
   ];
 
   const handleToggle = (key: string, value: boolean) => {
+    if(changesSaved) setChangesSaved(false);
     if (value !== undefined) {
       setClonedNotifications((prevNotifications) => ({
         ...prevNotifications,
